@@ -11,23 +11,18 @@
 # 
 
 CC=gcc
-LIB_DIR=./lib
-INC_DIR=./include
-BIN_DIR=./bin
-SRC_DIR=./src
+LIB_DIR=./lib/
+INC_DIR=./include/
+BIN_DIR=./bin/
+SRC_DIR=./src/
+TES_DIR=./testes/
 
-all: regra1 regra2 regran
+all: $(TES_DIR)main.o $(BIN_DIR)support.o 
+	$(CC) -o ./sisop $(TES_DIR)main.o $(BIN_DIR)support.o
 
-regra1: #dependências para a regra1
-	$(CC) -o $(BIN_DIR)regra1 $(SRC_DIR)regra1.c -Wall
+$(TES_DIR)main.o: $(TES_DIR)main.c
+	$(CC) -c  $(TES_DIR)main.c
+	mv main.o $(TES_DIR)
 
-regra2: #dependências para a regra2
-	$(CC) -o $(BIN_DIR)regra2 $(SRC_DIR)regra2.c -Wall
-
-regran: #dependências para a regran
-	$(CC) -o $(BIN_DIR)regran $(SRC_DIR)regran.c -Wall
-
-clean:
-	rm -rf $(LIB_DIR)/*.a $(BIN_DIR)/*.o $(SRC_DIR)/*~ $(INC_DIR)/*~ *~
 
 

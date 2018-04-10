@@ -1,0 +1,1 @@
+Para realizar algum teste, altere o nome da "main_xxx" para "main" e execute o make do diretório cthread
