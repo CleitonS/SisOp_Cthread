@@ -65,4 +65,23 @@ int findOtherJoin(int tid, FILA2 *fila){
     return 0;
 }
 
+
+
+/*-------------------------------------------------------------------
+Função:	Retorna 0 se o elemento foi inserido na fila com sucesso.
+		Retona !0 se ocorreu se erro.
+		
+-------------------------------------------------------------------*/
+int insertInFila(FILA2 *fila, TCB *newThread){
+	if (LastFila2(fila) != 0)
+		return -1;
+	else{
+		if (InsertAfterIteratorFila2(fila, newThread) != 0)
+			return -1
+		else 
+			return 0;				
+	} 	
+}
+
+
 #endif
