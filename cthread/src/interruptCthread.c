@@ -5,10 +5,24 @@
 //  Created by Bernardo Lignati on 15/04/18.
 //
 //
+
+
 #include "../include/cdata.h"
 #include "../include/support.h"
 #include "../include/cthread.h"
 #include "../include/cthreadaux.h"
+
+
+
+extern FILA2 aptos;
+extern FILA2 bloqueados;
+extern FILA2 aptos_sus;
+extern FILA2 bloqueados_sus;
+extern TCB_t *execute;
+extern csem_t semafaro; /*Obs: Na especificacao, o nome da variavel esta descrita com acento: "semáfaro". */
+
+
+
 
 /******************************************************************************
  Par‚metros:
