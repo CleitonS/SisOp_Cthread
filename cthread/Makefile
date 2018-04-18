@@ -24,5 +24,5 @@ $(TES_DIR)main.o: $(TES_DIR)main.c
 	$(CC) -c  $(TES_DIR)main.c
 	mv main.o $(TES_DIR)
 
-
-
+clean:
+	rm -rf $(TES_DIR)*.o 

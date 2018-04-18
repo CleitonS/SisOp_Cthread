@@ -1,6 +1,6 @@
 //
 //  interruptCthread.c
-//  
+//
 //
 //  Created by Bernardo Lignati on 15/04/18.
 //
@@ -36,19 +36,19 @@ extern csem_t semafaro; /*Obs: Na especificacao, o nome da variavel esta descrit
 
 int csuspend(int tid){
     if(execute->tid == tid) return -1;
-        
-    if(findInFila(tid,bloqueados) == 0){
+
+    if(findInFila(tid,&bloqueados) == 0){
         moveToBloqueadosSusFromBloqueados(tid);
         return 0;
     }
     else
-        if (findInFila(tid,aptos) == 0){
+        if (findInFila(tid,&aptos) == 0){
             moveToAptosSusFromAptos(tid);
             return 0;
         }
-        else return -2
-    
-    
+        else return -2;
+
+
 
 }
 
@@ -62,17 +62,17 @@ Erro -2 => Nao achou a Thread a ser liberada
  ******************************************************************************/
 int cresume(int tid){
 
-    if(findInFila(tid,bloqueados_sus) == 0){
+    if(findInFila(tid,&bloqueados_sus) == 0){
         moveToBloqueadosFromBloqueadoSus(tid);
         return 0;
     }
     else
-        if (findInFila(tid,aptos_sus) == 0){
+        if (findInFila(tid,&aptos_sus) == 0){
             moveToAptosFromAptosSus(tid);
             return 0;
         }
-        else return -2
-            
+        else return -2;
+
 
 
 
@@ -104,11 +104,26 @@ int csignal(csem_t *sem){
 
 
 }
-moveToBloqueadosSus(int tid){
-
-}
-moveToAptosSus(int tid){
+int moveToBloqueadosSus(int tid){
 
 }
 
+int moveToBloqueadosFromBloqueadoSus(int tid){
 
+}
+
+int moveToBloqueadosSusFromBloqueados(int tid){
+
+}
+
+int moveToAptosSusFromAptos(int tid){
+
+}
+
+int moveToAptosFromAptosSus(int tid){
+
+}
+
+int moveToAptosSus(int tid){
+
+}
