@@ -37,12 +37,12 @@ extern csem_t semafaro; /*Obs: Na especificacao, o nome da variavel esta descrit
 int csuspend(int tid){
     if(execute->tid == tid) return -1;
 
-    if(findInFila(tid,bloqueados) == 0){
+    if(findInFila(tid,&bloqueados) == 0){
         moveToBloqueadosSusFromBloqueados(tid);
         return 0;
     }
     else
-        if (findInFila(tid,aptos) == 0){
+        if (findInFila(tid,&aptos) == 0){
             moveToAptosSusFromAptos(tid);
             return 0;
         }
@@ -62,12 +62,12 @@ Erro -2 => Nao achou a Thread a ser liberada
  ******************************************************************************/
 int cresume(int tid){
 
-    if(findInFila(tid,bloqueados_sus) == 0){
+    if(findInFila(tid,&bloqueados_sus) == 0){
         moveToBloqueadosFromBloqueadoSus(tid);
         return 0;
     }
     else
-        if (findInFila(tid,aptos_sus) == 0){
+        if (findInFila(tid,&aptos_sus) == 0){
             moveToAptosFromAptosSus(tid);
             return 0;
         }
