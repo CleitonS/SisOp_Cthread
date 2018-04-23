@@ -26,6 +26,13 @@ extern csem_t semafaro; /*Obs: Na especificacao, o nome da variavel esta descrit
 
 
 
+
+int callScheduler(){
+	
+}
+
+
+
 /******************************************************************************
 Parâmetros:
 	tid:	identificador da thread cujo término está sendo aguardado.
@@ -68,6 +75,7 @@ Retorno:
 	Se erro	   => Valor negativo.
 ******************************************************************************/
 int csem_init (csem_t *sem, int count){
+	
 	FILA2 thrBlocSem;
 	if(!CreateFila2(&thrBlocSem))
 		return -1;

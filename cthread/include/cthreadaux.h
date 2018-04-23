@@ -1,6 +1,6 @@
 //
 //  CthreadAux.c
-//
+//  
 //	Funções de suporte à biblioteca cthread
 //
 //
@@ -21,7 +21,7 @@ extern csem_t semafaro;
 
 
 /*-------------------------------------------------------------------
-Função:	Retorna 0 se o tid passado se encontra na fila passado como
+Função:	Retorna 0 se o tid passado se encontra na fila passado como 
 		parâmetro e !0 se não se encontra.
 -------------------------------------------------------------------*/
 int findInFila(int tid, FILA2 *fila){
@@ -70,17 +70,20 @@ int findOtherJoin(int tid, FILA2 *fila){
 /*-------------------------------------------------------------------
 Função:	Retorna 0 se o elemento foi inserido na fila com sucesso.
 		Retona !0 se ocorreu se erro.
-
+		
 -------------------------------------------------------------------*/
 int insertInFila(FILA2 *fila, TCB_t *newThread){
-	if (LastFila2(fila) != 0)
-		return -1;
-	else{
-		if (InsertAfterIteratorFila2(fila, newThread) != 0)
-			return -1;
-		else
-			return 0;
+	if (LastFila2(fila) != 0 && FirstFila2(fila) != 0){
+		AppendFila2(fila, (void *) newThread);
+		return 0;
 	}
+	else if (InsertAfterIteratorFila2(fila, newThread) != 0)
+		return -1;
+	else 
+		return 0;	
+	
+	
+	
 }
 
 
