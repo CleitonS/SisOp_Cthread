@@ -17,7 +17,7 @@ extern FILA2 aptos;
 extern FILA2 bloqueados;
 extern FILA2 aptos_sus;
 extern FILA2 bloqueados_sus;
-extern TCB_t *execute;
+extern TCB_t execute;
 extern csem_t semafaro; /*Obs: Na especificacao, o nome da variavel esta descrita com acento: "semáfaro". */
 
 
@@ -55,7 +55,7 @@ int cjoin(int tid){
 			findOtherJoin(tid, &aptos_sus) != 0 && findOtherJoin(tid, &bloqueados_sus) != 0 )
             return -1; /*existem outro processo que esta aguardando esse mesmo tid*/
         else{
-            execute->waintingJoin = tid;
+            execute.waintingJoin = tid;
             /*funcao de: 'bloqueia processo'*/
             return 0;
         }
@@ -143,7 +143,7 @@ int createThreadMain(){
 		return -1;
 	threadMain.waintingJoin = -1;
 	
-	execute = &threadMain;	
+	execute = threadMain;	
 	return 0;
 	
 	
