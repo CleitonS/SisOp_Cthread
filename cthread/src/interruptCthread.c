@@ -18,7 +18,7 @@ extern FILA2 aptos;
 extern FILA2 bloqueados;
 extern FILA2 aptos_sus;
 extern FILA2 bloqueados_sus;
-extern TCB_t execute;
+extern TCB_t *execute;
 extern csem_t semafaro; /*Obs: Na especificacao, o nome da variavel esta descrita com acento: "semáfaro". */
 
 
@@ -35,7 +35,7 @@ extern csem_t semafaro; /*Obs: Na especificacao, o nome da variavel esta descrit
  ******************************************************************************/
 
 int csuspend(int tid){
-    if(execute.tid == tid) return -1;
+    if(execute->tid == tid) return -1;
 
     if(findInFila(tid,&bloqueados) == 0){
         moveToBloqueadosSusFromBloqueados(tid);
