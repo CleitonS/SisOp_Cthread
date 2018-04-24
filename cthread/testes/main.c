@@ -10,53 +10,69 @@ int main(){
 TCB_t NewNode1;
 TCB_t NewNode2;
 TCB_t NewNode3;
-FILA2 teste;
-
-TCB_t *NodeCurrent;
+TCB_t NewNode4;
 
 
-printf("criou fila %d\n", CreateFila2(&teste));
-
-NewNode1.state = 1;
-NewNode2.state = 2;
-NewNode3.state = 3;
-
-insertInFila(&teste, &NewNode1); 
-insertInFila(&teste, &NewNode2);
-insertInFila(&teste, &NewNode3);
-
-FirstFila2(&teste);
-NodeCurrent = (TCB_t *) GetAtIteratorFila2(&teste);
-printf("Primeiro nodo: %d\n", NodeCurrent->state);
-NextFila2(&teste);
-NodeCurrent = (TCB_t *) GetAtIteratorFila2(&teste);
-printf("Segundo nodo: %d\n", NodeCurrent->state);
-NextFila2(&teste);
-NodeCurrent = (TCB_t *) GetAtIteratorFila2(&teste);
-printf("Terceiro e Ultimo nodo: %d\n", NodeCurrent->state);
+NewNode1.tid = 1;
+NewNode2.tid = 2;
+NewNode3.tid = 3;
+NewNode4.tid = 4;
 
 
+/*
+teste consiste em:
+Colocar t1 em executando
+colocar t2 e t3 na fila de aptos
+Colocar t4 na fila de bloqueados
 
-printf("Excluindo primeiro nodo...\n");
-FirstFila2(&teste);
-if (DeleteAtIteratorFila2(&teste) == 0)
-	printf("Exclui nodo \n");
-else
-	printf("ERRO - Exclui nodo \n");
+Executar funcao para colocar o que esta executando em bloqueado e
+pegar o proximo de apto e colocar a executar: funcao "shiftNextApto"
+
+Depois buscar a thread 4 que esta na fila de bloqueado e coloca-la 
+no fim da fila de aptos: funcao "shiftFilas"
+
+
+*/
 
 
 
+execute = &NewNode1;
 
-LastFila2(&teste);
+printf("Inserindo nodos nas filas...\n");
+if (insertInFila(&aptos, &NewNode2) != 0)
+	printf("ERRO\n");
+if (insertInFila(&aptos, &NewNode3) != 0)
+	printf("ERRO\n");
+if(insertInFila(&bloqueados, &NewNode4) != 0)
+	printf("ERRO\n");
 
-NodeCurrent = (TCB_t *) GetAtIteratorFila2(&teste);
-printf("Último nodo: %d\n", NodeCurrent->state);
+printf("Fila de aptos: ");
+printFila(&aptos);
+printf("\nFila de block: ");
+printFila(&bloqueados);
+printf("\n");
+printf("Executando: %d\n", execute->tid);
 
+printf("exec -> block e apto -> exec \n");
+shiftNextApto(&bloqueados);
 
-FirstFila2(&teste);
-NodeCurrent = (TCB_t *) GetAtIteratorFila2(&teste);
-printf("Primeiro nodo: %d\n", NodeCurrent->state);
+printf("Fila de aptos: ");
+printFila(&aptos);
+printf("\nFila de block: ");
+printFila(&bloqueados);
+printf("\n");
+printf("Executando: %d\n", execute->tid);
 
+printf("Troca a thread 4 de bloc para apto\n");
+if (shiftFilas(&aptos, &bloqueados, 4) != 0)
+	printf("ERRO\n");
+
+printf("Fila de aptos: ");
+printFila(&aptos);
+printf("\nFila de block: ");
+printFila(&bloqueados);
+printf("\n");
+printf("Executando: %d\n", execute->tid);
 
 
 }
