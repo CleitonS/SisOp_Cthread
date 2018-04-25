@@ -206,9 +206,7 @@ void printFila(FILA2 *fila){
 			NextFila2(fila);			
         }
     }	
-	
-	
-	
+		
 }
 
 

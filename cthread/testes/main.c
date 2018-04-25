@@ -18,6 +18,10 @@ NewNode2.tid = 2;
 NewNode3.tid = 3;
 NewNode4.tid = 4;
 
+printf("Inicialização das estruturas - Erros: %d\n\n", initLib() );
+
+printf("Criando ThreadMain: %d \n\n", createThreadMain());
+
 
 /*
 teste consiste em:
@@ -37,6 +41,7 @@ no fim da fila de aptos: funcao "shiftFilas"
 
 
 execute = &NewNode1;
+
 
 printf("Inserindo nodos nas filas...\n");
 if (insertInFila(&aptos, &NewNode2) != 0)
@@ -75,4 +80,15 @@ printf("\n");
 printf("Executando: %d\n", execute->tid);
 
 
+printf("Teste do semáfaro - inserindo t2\n");
+if (insertInFila((FILA2 *)(&(semafaro.fila)), &NewNode2) != 0)
+	printf("ERRO\n");
+printf("\nFila do semáfaro: ");
+printFila((FILA2 *)(&(semafaro.fila)));
+printf("\n");
+
+
+
+
 }
+
