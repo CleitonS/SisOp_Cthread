@@ -18,7 +18,7 @@ extern FILA2 bloqueados;
 extern FILA2 aptos_sus;
 extern FILA2 bloqueados_sus;
 extern TCB_t *execute;
-extern csem_t semafaro; /*Obs: Na especificacao, o nome da variavel esta descrita com acento: "semáfaro". */
+extern csem_t semafaro; 
 
 
 
@@ -77,7 +77,7 @@ Retorno:
 int csem_init (csem_t *sem, int count){
 	
 	FILA2 thrBlocSem;
-	if(!CreateFila2(&thrBlocSem))
+	if(CreateFila2(&thrBlocSem) != 0)
 		return -1;
 	semafaro.count = RESOURCE;
 	semafaro.fila = &thrBlocSem;	
@@ -94,29 +94,29 @@ Função:	Inicializa todas as estruturas da biblioteca.
 int initLib(){
 	int error = 0;
 	
-	if (!CreateFila2(&aptos)){
+	if (CreateFila2(&aptos) != 0){
 		printf("ERROR - Inicializacao da fila de aptos \n");
 		error++;		
 	}
-	if (!CreateFila2(&bloqueados)){
+	if (CreateFila2(&bloqueados)!= 0){
 		printf("ERROR - Inicializacao da fila de bloqueados \n");
 		error++;		
 	}	
-	if (!CreateFila2(&aptos_sus)){
+	if (CreateFila2(&aptos_sus)!= 0){
 		printf("ERROR - Inicializacao da fila de aptos-suspensos \n");
 		error++;		
 	}
-	if (!CreateFila2(&bloqueados_sus)){
+	if (CreateFila2(&bloqueados_sus)!= 0){
 		printf("ERROR - Inicializacao da fila de bloqueados-suspensos \n");
 		error++;		
 	}		
 	
-	if (!csem_init(&semafaro, RESOURCE)){
+	if (csem_init(&semafaro, RESOURCE)!= 0){
 		printf("ERROR - Inicializacao do semafaro \n");
 		error++;
 	}	
 	
-	if (!createThreadMain()){
+	if (createThreadMain()!= 0){
 		printf("ERROR - Inicializacao thread main\n");
 		error++;
 	}
@@ -139,7 +139,7 @@ int createThreadMain(){
 	threadMain.tid = 0;
 	threadMain.state = PROCST_EXEC;
 	threadMain.prio = 0;
-	if (!getcontext(&(threadMain.context)))
+	if (getcontext(&(threadMain.context)) != 0)
 		return -1;
 	threadMain.waintingJoin = -1;
 	
