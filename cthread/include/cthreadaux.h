@@ -73,6 +73,12 @@ Função:	Retorna 0 se o elemento foi inserido na fila com sucesso.
 		
 -------------------------------------------------------------------*/
 int insertInFila(FILA2 *fila, TCB_t *newThread){
+	
+	if (AppendFila2(fila, (void *) newThread) != 0)
+		return -1;
+	else 
+		return 0;
+	/*
 	if (LastFila2(fila) != 0 && FirstFila2(fila) != 0){
 		AppendFila2(fila, (void *) newThread);
 		return 0;
@@ -84,7 +90,8 @@ int insertInFila(FILA2 *fila, TCB_t *newThread){
 			return -1;
 		else 
 			return 0;	
-	}	
+		*/
+
 }
 
 
@@ -137,19 +144,17 @@ Retorna 0 se a operação acorreu sem problemas.
 Retona !0 se ocorreu se erro.
 
 ERROS:
-	-1 -> Erro ao pegar o primeiro elemento da fila de aptos e 
-			colocá-lo a executar.
-	-2 -> Erro ao inserir a thread que estava executando na
+	-1 -> Erro ao inserir a thread que estava executando na
 			fila passada por parâmetro.
+	-2 -> Erro ao pegar o primeiro elemento da fila de aptos e 
+			colocá-lo a executar.
+
 -------------------------------------------------------------------*/
-int shiftNextApto(FILA2 *fila){
-	TCB_t *OldNode;
-	OldNode = execute;
-	
-	if (nextApto() != 0)
+int shiftNextApto(FILA2 *fila){	
+	if (insertInFila(fila, execute) != 0 )
 		return -1;
-	else{
-		if (insertInFila(fila, OldNode) != 0 )
+	else {
+		if (nextApto() != 0)
 			return -2;
 		else 
 			return 0;
