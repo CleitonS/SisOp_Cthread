@@ -142,7 +142,7 @@ int createThreadMain(){
 	if (getcontext(&(threadMain.context)) != 0)
 		return -1;
 	threadMain.waintingJoin = -1;
-	
+	execute = (TCB_t *) malloc(sizeof(TCB_t));
 	execute = &threadMain;	
 	return 0;
 	
