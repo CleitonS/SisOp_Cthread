@@ -19,7 +19,7 @@ extern FILA2 aptos_sus;
 extern FILA2 bloqueados_sus;
 extern TCB_t *execute;
 extern csem_t semafaro; 
-
+extern TCB_t threadMain;
 
 
 #define RESOURCE 1  /* representa a quantidade existente do recurso controlado pelo semáforo */
@@ -39,16 +39,17 @@ Parâmetros:
 Retorno:
 	Se correto => 0 (zero)
 	Se erro	   => Valor negativo.
+		-1 --> Outro processo esta aguardando essa thread
+		-2 --> Thread que estou esperando terminar não foi encontrada
+		-3 --> Erro ao bloquear processo ou executar próximo da fila de aptos.
+	
 ******************************************************************************/
 int cjoin(int tid){
 
-    if (findInFila(tid, &aptos)     !=0  && findInFila(tid, &bloqueados)     != 0 &&
+    if (findInFila(tid, &aptos) !=0  && findInFila(tid, &bloqueados)     != 0 &&
 		findInFila(tid, &aptos_sus) != 0 && findInFila(tid, &bloqueados_sus) != 0){
-        /*Posso terminar o processo, pois o tid que ele esta esperando não esta em nenhuma das filas, 
-		logo, ou ele nunca existiu ou existiu e já foi terminado*/
-		
-        /* --> completar com a função de termino... <-- */
-        return 0;
+		/*Thread não encontrada: Não foi criada ou já terminou...*/		
+        return -2;
     }
     else{
         if (findOtherJoin(tid, &aptos)     != 0 && findOtherJoin(tid, &bloqueados)     != 0  &&
@@ -56,8 +57,10 @@ int cjoin(int tid){
             return -1; /*existem outro processo que esta aguardando esse mesmo tid*/
         else{
             execute->waintingJoin = tid;
-            /*funcao de: 'bloqueia processo'*/
-            return 0;
+            if (shiftNextApto(&bloqueados) != 0)
+				return -3;
+			else 
+				return 0;
         }
     }
 
@@ -134,8 +137,7 @@ Retorno:
 	Se correto => 0 (zero)
 	Se erro	   => Valor negativo.
 ******************************************************************************/
-int createThreadMain(){
-	TCB_t threadMain;
+int createThreadMain(){	
 	threadMain.tid = 0;
 	threadMain.state = PROCST_EXEC;
 	threadMain.prio = 0;
@@ -143,7 +145,7 @@ int createThreadMain(){
 		return -1;
 	threadMain.waintingJoin = -1;
 	execute = (TCB_t *) malloc(sizeof(TCB_t));
-	execute = &threadMain;	
+	execute = (TCB_t *) &threadMain;	
 	return 0;
 	
 	
