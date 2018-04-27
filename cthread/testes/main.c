@@ -1,4 +1,4 @@
-/*Teste da função cidentify*/
+/*Teste da função Cjoin*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -20,56 +20,17 @@ NewNode4.tid = 4;
 
 printf("Inicialização das estruturas - Erros: %d\n\n", initLib() );
 
-printf("Criando ThreadMain: %d \n\n", createThreadMain());
-
-
-/*
-teste consiste em:
-Colocar t1 em executando
-colocar t2 e t3 na fila de aptos
-Colocar t4 na fila de bloqueados
-
-Executar funcao para colocar o que esta executando em bloqueado e
-pegar o proximo de apto e colocar a executar: funcao "shiftNextApto"
-
-Depois buscar a thread 4 que esta na fila de bloqueado e coloca-la 
-no fim da fila de aptos: funcao "shiftFilas"
-
-
-*/
-
-
-
-execute = &NewNode1;
-
-
+printf("Inserindo nodos nas filas...\n");
+if (insertInFila(&aptos, &NewNode1) != 0)
+	printf("ERRO\n");
 printf("Inserindo nodos nas filas...\n");
 if (insertInFila(&aptos, &NewNode2) != 0)
 	printf("ERRO\n");
+printf("Inserindo nodos nas filas...\n");
 if (insertInFila(&aptos, &NewNode3) != 0)
 	printf("ERRO\n");
-if(insertInFila(&bloqueados, &NewNode4) != 0)
-	printf("ERRO\n");
-
-printf("Fila de aptos: ");
-printFila(&aptos);
-printf("\nFila de block: ");
-printFila(&bloqueados);
-printf("\n");
-printf("Executando: %d\n", execute->tid);
-
-printf("exec -> block e apto -> exec \n");
-shiftNextApto(&bloqueados);
-
-printf("Fila de aptos: ");
-printFila(&aptos);
-printf("\nFila de block: ");
-printFila(&bloqueados);
-printf("\n");
-printf("Executando: %d\n", execute->tid);
-
-printf("Troca a thread 4 de bloc para apto\n");
-if (shiftFilas(&aptos, &bloqueados, 4) != 0)
+printf("Inserindo nodos nas filas...\n");
+if (insertInFila(&aptos, &NewNode4) != 0)
 	printf("ERRO\n");
 
 printf("Fila de aptos: ");
@@ -80,15 +41,48 @@ printf("\n");
 printf("Executando: %d\n", execute->tid);
 
 
-printf("Teste do semáfaro - inserindo t2\n");
-if (insertInFila((FILA2 *)(&(semafaro.fila)), &NewNode2) != 0)
+printf("Exec -> Bloc; nextApto\n");
+if (shiftNextApto(&bloqueados) != 0)
 	printf("ERRO\n");
-printf("\nFila do semáfaro: ");
-printFila((FILA2 *)(&(semafaro.fila)));
+printf("Fila de aptos: ");
+printFila(&aptos);
+printf("\nFila de block: ");
+printFila(&bloqueados);
 printf("\n");
+printf("Executando: %d\n", execute->tid);
 
+printf("Cjoin : A thread que esta executando (t1) está esperando o término da t4... Erros: %d\n", cjoin(4));
+printf("Fila de aptos: ");
+printFila(&aptos);
+printf("\nFila de block: ");
+printFila(&bloqueados);
+printf("\n");
+printf("Executando: %d\n", execute->tid);
 
+printf("Exec -> apt; nextApto\n");
+if (shiftNextApto(&aptos) != 0)
+	printf("ERRO\n");
+printf("Exec -> apt; nextApto\n");
+if (shiftNextApto(&aptos) != 0)
+	printf("ERRO\n");
+printf("Fila de aptos: ");
+printFila(&aptos);
+printf("\nFila de block: ");
+printFila(&bloqueados);
+printf("\n");
+printf("Executando: %d\n", execute->tid);
 
+findInFila(1, &bloqueados);
+TCB_t * nodeTeste = GetAtIteratorFila2(&bloqueados);
+printf("OBS: Thread 1 esperando por : waiting = %d\n", nodeTeste->waintingJoin);
+printf("Finish thread em exec.(t4) ERRO: %d\n", finishThread());
+
+printf("Fila de aptos: ");
+printFila(&aptos);
+printf("\nFila de block: ");
+printFila(&bloqueados);
+printf("\n");
+printf("Executando: %d\n", execute->tid);
 
 }
 
