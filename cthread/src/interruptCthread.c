@@ -38,12 +38,12 @@ int csuspend(int tid){
     if(execute->tid == tid) return -1;
 
     if(findInFila(tid,&bloqueados) == 0){
-        moveToBloqueadosSusFromBloqueados(tid);
+        shiftFila(&bloqueados_sus,&bloqueados,&tid);//move de bloqueados pra bloqueados sus
         return 0;
     }
     else
         if (findInFila(tid,&aptos) == 0){
-            moveToAptosSusFromAptos(tid);
+            shiftFila(&aptos_sus,&aptos,&tid);
             return 0;
         }
         else return -2;
@@ -63,12 +63,12 @@ Erro -2 => Nao achou a Thread a ser liberada
 int cresume(int tid){
 
     if(findInFila(tid,&bloqueados_sus) == 0){
-        moveToBloqueadosFromBloqueadoSus(tid);
+        shiftFila(&bloqueados,&bloqueados_sus,&tid);
         return 0;
     }
     else
         if (findInFila(tid,&aptos_sus) == 0){
-            moveToAptosFromAptosSus(tid);
+            shiftFila(&aptos,&aptos_sus,&tid);
             return 0;
         }
         else return -2;
@@ -88,7 +88,8 @@ int cresume(int tid){
 int cwait(csem_t *sem){
     if(sem->count <= 0){
     
-        movoToFilaSemafora(sem);//adiciona a fila interna do semaforo e bloqueia o processo em execucao escalonador
+        insereInFila(sem->fila,execute->tid);//adiciona a fila interna do semaforo
+        shiftNextApto(&bloqueados);
         return -1;
     }
     else{
@@ -104,41 +105,16 @@ int cwait(csem_t *sem){
 	Se correto => 0 (zero)
 	Se erro	   => Valor negativo.
  ******************************************************************************/
-/*Liberação de recurso: a chamada csignal serve para indicar que a thread está liberando o recurso. Para cada chamada da primitiva csignal, a variável count deverá ser incrementada de uma unidade. Se houver mais de uma thread bloqueada a espera desse recurso a primeira delas, segundo uma política de FIFO, deverá passar para o estado apto e as demais devem continuar no estado bloqueado.*/
 int csignal(csem_t *sem){
     sem -> count ++;
-    if(isNotEmpty(sem -> fila)){
-        removeFromSemFila(sem);//remove da fila do semafaro e passa para estado de apto
+    if(FirstFila2(sem -> fila) != 0){
+        
+        shiftFila(&bloqueados,&aptos,sem->fila->first->tid)
+        DeleteAtIteratorFila2(sem->fila);//remove da fila do semafaro e passa para estado de apto
+        
         
     }
-    //escalonador(?)
 
 
 }
 
-int moveToBloqueadosFromBloqueadoSus(int tid){
-
-}
-
-int moveToBloqueadosSusFromBloqueados(int tid){
-
-}
-
-int moveToAptosSusFromAptos(int tid){
-
-}
-
-int moveToAptosFromAptosSus(int tid){
-
-}
-
-
-int moveToFilaSemaforo(csem_t *sem){
-    moveToBloqueadosFromExecutando();
-
-}
-int moveToBloqueadosFromExecutando(){
-}
-int removeFromSemFila(sem){
-}
- */
