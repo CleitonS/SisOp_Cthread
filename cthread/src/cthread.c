@@ -14,7 +14,7 @@ FILA2 bloqueados;
 FILA2 aptos_sus;
 FILA2 bloqueados_sus;
 TCB_t *execute;
-csem_t semafaro; /*Obs: Na especificacao, o nome da variavel esta descrita com acento: "sem�faro". */
+/*csem_t semafaro; */
 TCB_t threadMain;
 
 int init = 0;

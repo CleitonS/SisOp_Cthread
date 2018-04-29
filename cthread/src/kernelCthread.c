@@ -18,11 +18,10 @@ extern FILA2 bloqueados;
 extern FILA2 aptos_sus;
 extern FILA2 bloqueados_sus;
 extern TCB_t *execute;
-extern csem_t semafaro; 
+/*extern csem_t semafaro; */
 extern TCB_t threadMain;
 
-
-#define RESOURCE 1  /* representa a quantidade existente do recurso controlado pelo semáforo */
+/*#define RESOURCE 1 */
 
 
 
@@ -82,8 +81,8 @@ int csem_init (csem_t *sem, int count){
 	FILA2 thrBlocSem;
 	if(CreateFila2(&thrBlocSem) != 0)
 		return -1;
-	semafaro.count = RESOURCE;
-	semafaro.fila = &thrBlocSem;	
+	sem -> count = count;
+	sem -> fila = &thrBlocSem;	
 	return 0;
 }
 
@@ -112,12 +111,7 @@ int initLib(){
 	if (CreateFila2(&bloqueados_sus)!= 0){
 		printf("ERROR - Inicializacao da fila de bloqueados-suspensos \n");
 		error++;		
-	}		
-	
-	if (csem_init(&semafaro, RESOURCE)!= 0){
-		printf("ERROR - Inicializacao do semafaro \n");
-		error++;
-	}	
+	}			
 	
 	if (createThreadMain()!= 0){
 		printf("ERROR - Inicializacao thread main\n");
