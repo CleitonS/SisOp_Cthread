@@ -117,4 +117,13 @@ int csignal(csem_t *sem){
 
 
 }
+/*Retorno:
+Quando executada corretamente: retorna 0 (zero) Caso contrário, retorna um valor negativo.*/
+int cyield(void)(){
+    if( shiftNextApto(&aptos) == 0)
+        return 0;
+    return -1;
+    
+}
+
 
