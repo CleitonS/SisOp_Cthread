@@ -1,4 +1,4 @@
-/*Teste da função Cjoin*/
+/*Teste do semáfaro*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,6 +12,10 @@ TCB_t NewNode2;
 TCB_t NewNode3;
 TCB_t NewNode4;
 
+csem_t semafaro;
+csem_t semafaro2;
+
+
 
 NewNode1.tid = 1;
 NewNode2.tid = 2;
@@ -20,69 +24,45 @@ NewNode4.tid = 4;
 
 printf("Inicialização das estruturas - Erros: %d\n\n", initLib() );
 
-printf("Inserindo nodos nas filas...\n");
-if (insertInFila(&aptos, &NewNode1) != 0)
-	printf("ERRO\n");
-printf("Inserindo nodos nas filas...\n");
-if (insertInFila(&aptos, &NewNode2) != 0)
-	printf("ERRO\n");
-printf("Inserindo nodos nas filas...\n");
-if (insertInFila(&aptos, &NewNode3) != 0)
-	printf("ERRO\n");
-printf("Inserindo nodos nas filas...\n");
-if (insertInFila(&aptos, &NewNode4) != 0)
-	printf("ERRO\n");
+printf("inicializacao do semáfaro. ERROS: %d\n", csem_init(&semafaro, 1));
+printf("inicializacao do semáfaro. ERROS: %d\n", csem_init(&semafaro2, 1));
 
-printf("Fila de aptos: ");
-printFila(&aptos);
-printf("\nFila de block: ");
-printFila(&bloqueados);
+printf("Inserindo t1 na fila do semáfaro: ERROS: %d\n", insertInFila((FILA2 *)(&(semafaro.fila)), &NewNode1));
+
+printf("Fila do semafaro: ");
+printFila((FILA2 *)(&(semafaro.fila)));
 printf("\n");
-printf("Executando: %d\n", execute->tid);
 
+printf("Inserindo t2 na fila do semáfaro: ERROS: %d\n", insertInFila((FILA2 *)(&(semafaro.fila)), &NewNode2));
 
-printf("Exec -> Bloc; nextApto\n");
-if (shiftNextApto(&bloqueados) != 0)
-	printf("ERRO\n");
-printf("Fila de aptos: ");
-printFila(&aptos);
-printf("\nFila de block: ");
-printFila(&bloqueados);
+printf("Fila do semafaro: ");
+printFila((FILA2 *)(&(semafaro.fila)));
 printf("\n");
-printf("Executando: %d\n", execute->tid);
 
-printf("Cjoin : A thread que esta executando (t1) está esperando o término da t4... Erros: %d\n", cjoin(4));
-printf("Fila de aptos: ");
-printFila(&aptos);
-printf("\nFila de block: ");
-printFila(&bloqueados);
+
+
+printf("\n\n\nTrabalhando com semafaro2\n\n\n");
+
+printf("Inserindo t3 na fila do semáfaro2: ERROS: %d\n", insertInFila((FILA2 *)(&(semafaro2.fila)), &NewNode3));
+
+printf("Fila do semafaro2: ");
+printFila((FILA2 *)(&(semafaro2.fila)));
 printf("\n");
-printf("Executando: %d\n", execute->tid);
 
-printf("Exec -> apt; nextApto\n");
-if (shiftNextApto(&aptos) != 0)
-	printf("ERRO\n");
-printf("Exec -> apt; nextApto\n");
-if (shiftNextApto(&aptos) != 0)
-	printf("ERRO\n");
-printf("Fila de aptos: ");
-printFila(&aptos);
-printf("\nFila de block: ");
-printFila(&bloqueados);
+printf("Inserindo t4 na fila do semáfaro2: ERROS: %d\n", insertInFila((FILA2 *)(&(semafaro2.fila)), &NewNode4));
+
+printf("Fila do semafaro2: ");
+printFila((FILA2 *)(&(semafaro2.fila)));
 printf("\n");
-printf("Executando: %d\n", execute->tid);
 
-findInFila(1, &bloqueados);
-TCB_t * nodeTeste = GetAtIteratorFila2(&bloqueados);
-printf("OBS: Thread 1 esperando por : waiting = %d\n", nodeTeste->waintingJoin);
-printf("Finish thread em exec.(t4) ERRO: %d\n", finishThread());
 
-printf("Fila de aptos: ");
-printFila(&aptos);
-printf("\nFila de block: ");
-printFila(&bloqueados);
+printf("Fila do semafaro: ");
+printFila((FILA2 *)(&(semafaro.fila)));
 printf("\n");
-printf("Executando: %d\n", execute->tid);
+
+
+
+
 
 }
 
