@@ -19,9 +19,11 @@ extern TCB_t *execute;
 /*extern csem_t semafaro; */
 extern TCB_t threadMain;
 
+#define stackMem 64000;
 
-ucontext_t threadAdress;
-ucontext_t dispatcher_context;
+
+ucontext_t finalThreadAddress;
+
 
 int idCounter = 0;
 
@@ -59,11 +61,14 @@ int ccreate (void *(*start)(void *), void *arg, int prio){
 
   getcontext(&(newThread->context));
 
-  //newThread->
-	//Colocar aqui stacks? Não entendi muito bem essa parte.
-	//Falei com um pessoal e eles comentaram sobre
-	//newThread->context.uc_link = &threadAdress; mas não entendi muito bem.
-	//Alguém saberia?
+	//Aqui receberemos o endereço da thread final
+	newThread->context.uc_link = finalThreadAddress;
+	newThread->context.uc_stack.ss_size = stackMem;
+	newThread->context.uc_stack.ss_sp = malloc(stackMem);
+
+	//Referencia para as atribuições acima se alguém quiser ver.
+  //http://nitish712.blogspot.com.br/2012/10/thread-library-using-context-switching.html
+
 
 	//Arg passado como parametro da função ccreate.
 	makecontext(&(newThread->context),(void(*)(void))start,1,arg);
