@@ -163,19 +163,20 @@ ERROS:
 			fila passada por parâmetro.
 	-2 -> Erro ao pegar o primeiro elemento da fila de aptos e
 			colocá-lo a executar.
+  -3 -> Erro pois não conseguiu chamar o dispatcher
 
 -------------------------------------------------------------------*/
 int shiftNextApto(FILA2 *fila){
-  if(!dispatch()){
+
     if (insertInFila(fila, execute) != 0 )
       return -1;
     else {
       if (nextApto() != 0)
         return -2;
       else
-        return 0;
+        return dispatch();
     }
-  }
+
 
 }
 

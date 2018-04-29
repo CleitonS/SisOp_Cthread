@@ -124,6 +124,7 @@ int dispatch(){
 		printf("Não há mais threads a serem executadas!\n");
 	}
 
-	return -1;
+	//Retorno de erro -3 caso não der para executar o dispatch.
+	return -3;
 
 }
