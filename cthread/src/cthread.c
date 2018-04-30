@@ -4,7 +4,7 @@
 //
 //
  
-//#include "../src/contextCthread.c"
+#include "../src/contextCthread.c"
 #include "../src/kernelCthread.c"
 #include "../src/interruptCthread.c"
 
