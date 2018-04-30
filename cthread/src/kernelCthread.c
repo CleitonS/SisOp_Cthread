@@ -48,7 +48,7 @@ int shiftNextApto(FILA2 *fila){
       if (nextApto() != 0)
         return -2;
       else
-        return -3; //VER AQUI onde tinha o dispatch
+        return 0; //VER AQUI onde tinha o dispatch. ....
     }
 
 
