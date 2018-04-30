@@ -136,26 +136,11 @@ int ccreate (void *(*start)(void *), void *arg, int prio){
 
 void dispatch(){
 	printf("\n dispatcher entrou\n");
-	nextApto();
+
 	if(nextApto() == 0){
 
 		setcontext(&execute->context);
 	}
 	else
-		printf("erro dispatch\n");	
+		printf("erro dispatch\n");
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
