@@ -41,7 +41,7 @@ Retorno:
 	Se erro	   => Valor negativo.
 ******************************************************************************/
 int ccreate (void *(*start)(void *), void *arg, int prio){
-
+	TCB_t *newThread;
 
 
 
@@ -49,7 +49,7 @@ int ccreate (void *(*start)(void *), void *arg, int prio){
 	if(prio == 0){
 
 	/*---------------------------------Inicialização da TCB---------------------------------*/
-	TCB_t *newThread;
+
 
   idCounter++;
 
@@ -97,7 +97,7 @@ int ccreate (void *(*start)(void *), void *arg, int prio){
 	}
 
 	//Retorno do tId da thread criada.
-	printf("Nova thread criada com sucesso. tid=%d\n",newThread->tid);
+	printf("Nova thread criada com sucesso. tid=%d\n", newThread->tid);
 	return (newThread->tid);
 
 }
