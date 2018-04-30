@@ -4,6 +4,9 @@
 //
 //
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "../src/contextCthread.c"
 #include "../src/kernelCthread.c"
 #include "../src/interruptCthread.c"

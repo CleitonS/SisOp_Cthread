@@ -11,6 +11,7 @@
 #include "../include/cthread.h"
 #include "../include/cthreadaux.h"
 
+
 extern FILA2 aptos;
 extern FILA2 bloqueados;
 extern FILA2 aptos_sus;

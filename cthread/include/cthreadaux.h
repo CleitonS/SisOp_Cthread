@@ -151,35 +151,6 @@ int nextApto(){
 }
 
 
-/*-------------------------------------------------------------------
-Função:	Insere a thread que esta executando na fila passada por
-parametro e coloca o primeiro elemento da fila de aptos para executar.
-
-Retorna 0 se a operação acorreu sem problemas.
-Retona !0 se ocorreu se erro.
-
-ERROS:
-	-1 -> Erro ao inserir a thread que estava executando na
-			fila passada por parâmetro.
-	-2 -> Erro ao pegar o primeiro elemento da fila de aptos e
-			colocá-lo a executar.
-  -3 -> Erro pois não conseguiu chamar o dispatcher
-
--------------------------------------------------------------------*/
-int shiftNextApto(FILA2 *fila){
-
-    if (insertInFila(fila, execute) != 0 )
-      return -1;
-    else {
-      if (nextApto() != 0)
-        return -2;
-      else
-        return dispatch();
-    }
-
-
-}
-
 
 
 

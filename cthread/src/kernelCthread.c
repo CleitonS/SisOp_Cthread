@@ -24,11 +24,58 @@ extern TCB_t threadMain;
 /*#define RESOURCE 1 */
 
 
+/*-------------------------------------------------------------------
+Função:	Insere a thread que esta executando na fila passada por
+parametro e coloca o primeiro elemento da fila de aptos para executar.
 
+Retorna 0 se a operação acorreu sem problemas.
+Retona !0 se ocorreu se erro.
 
-int callScheduler(){
+ERROS:
+	-1 -> Erro ao inserir a thread que estava executando na
+			fila passada por parâmetro.
+	-2 -> Erro ao pegar o primeiro elemento da fila de aptos e
+			colocá-lo a executar.
+  -3 -> Erro pois não conseguiu chamar o dispatcher
+
+-------------------------------------------------------------------*/
+int shiftNextApto(FILA2 *fila){
+
+    if (insertInFila(fila, execute) != 0 )
+      return -1;
+    else {
+      if (nextApto() != 0)
+        return -2;
+      else
+        return dispatch();
+    }
+
 
 }
+
+
+
+/******************************************************************************
+Inicializa Thread Main na primeira execução.
+Parâmetros:
+Retorno:
+	Se correto => 0 (zero)
+	Se erro	   => Valor negativo.
+******************************************************************************/
+int createThreadMain(){
+	threadMain.tid = 0;
+	threadMain.state = PROCST_EXEC;
+	threadMain.prio = 0;
+	if (getcontext(&(threadMain.context)) != 0)
+		return -1;
+	threadMain.waintingJoin = -1;
+	execute = (TCB_t *) malloc(sizeof(TCB_t));
+	execute = (TCB_t *) &threadMain;
+	return 0;
+
+
+}
+
 
 
 
@@ -82,7 +129,7 @@ Retorno:
 int csem_init (csem_t *sem, int count){
 
 	checkMainThread();
-	
+
 	FILA2 thrBlocSem;
 	if(CreateFila2(&thrBlocSem) != 0)
 		return -1;
@@ -124,28 +171,4 @@ int initLib(){
 	}
 
 	return error;
-}
-
-
-
-
-/******************************************************************************
-Inicializa Thread Main na primeira execução.
-Parâmetros:
-Retorno:
-	Se correto => 0 (zero)
-	Se erro	   => Valor negativo.
-******************************************************************************/
-int createThreadMain(){
-	threadMain.tid = 0;
-	threadMain.state = PROCST_EXEC;
-	threadMain.prio = 0;
-	if (getcontext(&(threadMain.context)) != 0)
-		return -1;
-	threadMain.waintingJoin = -1;
-	execute = (TCB_t *) malloc(sizeof(TCB_t));
-	execute = (TCB_t *) &threadMain;
-	return 0;
-
-
 }
