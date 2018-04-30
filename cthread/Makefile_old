@@ -17,11 +17,12 @@ BIN_DIR=./bin/
 SRC_DIR=./src/
 TES_DIR=./testes/
 
-all:
-	gcc -c $(SRC_DIR)cthread.c -o $(BIN_DIR)libcthread.o -Wall
-	ar crs $(LIB_DIR)libcthread.a $(BIN_DIR)libcthread.o $(BIN_DIR)support.o 
-	
+all: $(TES_DIR)main.o $(BIN_DIR)support.o 
+	$(CC) -o ./sisop $(TES_DIR)main.o $(BIN_DIR)support.o
+
+$(TES_DIR)main.o: $(TES_DIR)main.c
+	$(CC) -c  $(TES_DIR)main.c
+	mv main.o $(TES_DIR)
+
 clean:
-	rm -rf $(TES_DIR)*.o
-	rm $(BIN_DIR)libcthread.o
-	rm $(LIB_DIR)libcthread.a
+	rm -rf $(TES_DIR)*.o 

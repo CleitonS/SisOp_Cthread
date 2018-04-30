@@ -125,20 +125,19 @@ int csignal(csem_t *sem){
     sem -> count ++;
     if(FirstFila2(sem -> fila) != 0){
         thread = GetAtIteratorFila2(sem->fila);
-        
+
         if(shiftFilas(&bloqueados,&aptos,thread->tid)){
             DeleteAtIteratorFila2(sem->fila);//remove da fila do semafaro e passa para estado de apto
             return 0;
         }
         else return -2;
-        
+
     }
     else return -1;
 
     }
 
 
-}
 /*Retorno:
 Quando executada corretamente: retorna 0 (zero) Caso contrário, retorna um valor negativo.*/
 int cyield(void){
