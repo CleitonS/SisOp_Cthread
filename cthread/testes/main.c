@@ -21,7 +21,7 @@ int main(){
 
   int firstID, secondID, thirdID;
 
-  first = ccreate(first,(void *) NULL,0);
+  firstID = ccreate(first,(void *) NULL,0);
   printf("first TID: %d\n", firstID);
 
 
