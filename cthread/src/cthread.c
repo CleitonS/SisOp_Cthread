@@ -3,10 +3,11 @@
 //
 //
 //
-
-
+ 
+//#include "../src/contextCthread.c"
 #include "../src/kernelCthread.c"
-/*#include "../src/interruptCthread.c"*/
+#include "../src/interruptCthread.c"
+
 
 
 FILA2 aptos;

@@ -109,7 +109,7 @@ int csignal(csem_t *sem){
     sem -> count ++;
     if(FirstFila2(sem -> fila) != 0){
         
-        shiftFila(&bloqueados,&aptos,sem->fila->first->tid)
+        shiftFila(&bloqueados,&aptos,sem->fila->first->node);
         DeleteAtIteratorFila2(sem->fila);//remove da fila do semafaro e passa para estado de apto
         
         
@@ -119,7 +119,7 @@ int csignal(csem_t *sem){
 }
 /*Retorno:
 Quando executada corretamente: retorna 0 (zero) Caso contrário, retorna um valor negativo.*/
-int cyield(void)(){
+int cyield(void){
     if( shiftNextApto(&aptos) == 0)
         return 0;
     return -1;
