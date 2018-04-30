@@ -113,11 +113,11 @@ int cjoin(int tid){
 			findOtherJoin(tid, &aptos_sus) != 0 && findOtherJoin(tid, &bloqueados_sus) != 0 )
             return -1; /*existem outro processo que esta aguardando esse mesmo tid*/
         else{
-            execute->waintingJoin = tid;
-			swapcontext(&execute->context, &dispatchAddress);
+            execute->waintingJoin = tid;			
             if (shiftNextApto(&bloqueados) != 0)
 				return -3;
 			else{
+				swapcontext(&execute->context, &dispatchAddress);
 				
 				return 0;
 			}
