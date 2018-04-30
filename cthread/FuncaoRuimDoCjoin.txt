@@ -1,0 +1,42 @@
+
+int updateJoin(){
+    TCB_t *thread = (TCB_t *) malloc(sizeof(TCB_t));
+	int tidWaiting[100];
+	int endFila = 0;
+	int iInsert = 0;
+	int iRemove = 0;
+	
+	for(int k = 0; k<=100;k++)
+		tidWaiting[k] = -1;
+	
+	if (FirstFila2(&bloqueados) != 0)
+        return 0;
+    else{
+        while (GetAtIteratorFila2(&bloqueados) != NULL || endFila != 1){
+            thread = GetAtIteratorFila2(&bloqueados);
+            if (thread->waintingJoin != -1){
+                tidWaiting[iInsert] = thread->waintingJoin;
+				iInsert++;
+			}
+            else
+                if (NextFila2(&bloqueados) != 0)
+                    endFila = 1;
+        }
+    }
+	
+	for (iRemove = 0; iRemove < iInsert; iRemove++ ){
+		if (findInFila(tidWaiting[iRemove], &aptos) ==0  || findInFila(tidWaiting[iRemove], &bloqueados)     == 0 ||
+			findInFila(tidWaiting[iRemove], &aptos_sus) == 0 || findInFila(tidWaiting[iRemove], &bloqueados_sus) == 0)	
+				tidWaiting[iRemove] = -1;
+	}
+	for (iRemove = 0; iRemove < iInsert; iRemove++ ){
+		if(tidWaiting[iRemove] != -1)
+			findOtherJoin(tidWaiting[iRemove] ,&bloqueados);
+			thread = GetAtIteratorFila2(&bloqueados);
+			thread -> waintingJoin = -1;
+			shiftFilas(&aptos, &bloqueados,thread->tid);
+	}	
+}
+
+
+
