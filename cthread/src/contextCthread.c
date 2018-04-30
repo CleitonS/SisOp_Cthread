@@ -26,7 +26,7 @@ extern TCB_t threadMain;
 char stackMem[64000];
 
 
-ucontext_t finalThreadAddress;
+extern ucontext_t finalThreadAddress, dispatchAddress;
 
 
 int idCounter = 0;
@@ -134,27 +134,36 @@ int ccreate (void *(*start)(void *), void *arg, int prio){
 }
 
 
-int dispatch(TCB_t *newNode,TCB_t *oldNode){
+int dispatch(){
 	printf("\n dispatcher entrou\n");
-	/*printf("thread velha : %p thread nova : %p\n", oldNode->context, newNode ->context);
-	swapcontext(&(oldNode->context),&(newNode->context));
+	nextApto();
+	if(nextApto() == 0){
 
-	printf("swap\n");
-*/
-
-	//Salvar contexto do nodo que saiu do execute
-	//getcontext(&oldNode->context);
-
-	swapcontext(&oldNode->context,&newNode->context);
-
-
-	//setcontext(&newNode->context);
-
-	printf("***********************swapped!");
-
-
-	return 0;
-
-
-
+		setcontext(&execute->context);
+	}
+	else
+		printf("erro dispatch\n");	
 }
+
+
+
+int initDispatch(){
+	
+	getcontext(&dispatchAddress);
+	dispatchAddress.uc_link = 0;
+	dispatchAddress.uc_stack.ss_sp = (char*) malloc(stackSize);
+	dispatchAddress.uc_stack.ss_size = stackSize;
+	makecontext(&dispatchAddress, (void(*)(void))dispatch, 0);
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+

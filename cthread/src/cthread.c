@@ -20,7 +20,7 @@ FILA2 bloqueados_sus;
 TCB_t *execute;
 /*csem_t semafaro; */
 TCB_t threadMain;
-
+ucontext_t finalThreadAddress, dispatchAddress;
 int init = 0;
 
 

@@ -20,6 +20,7 @@ extern FILA2 bloqueados_sus;
 extern TCB_t *execute;
 /*extern csem_t semafaro; */
 extern TCB_t threadMain;
+extern ucontext_t finalThreadAddress, dispatchAddress;
 
 /*#define RESOURCE 1 */
 
@@ -113,10 +114,13 @@ int cjoin(int tid){
             return -1; /*existem outro processo que esta aguardando esse mesmo tid*/
         else{
             execute->waintingJoin = tid;
+			swapcontext(&execute->context, &dispatch_ctx);
             if (shiftNextApto(&bloqueados) != 0)
 				return -3;
-			else
+			else{
+				
 				return 0;
+			}
         }
     }
 
@@ -169,6 +173,12 @@ int initLib(){
 	}
 	if (CreateFila2(&bloqueados_sus)!= 0){
 		printf("ERROR - Inicializacao da fila de bloqueados-suspensos \n");
+		error++;
+	}
+	
+	
+	if (initDispatch()!= 0){
+		printf("ERROR - Inicializacao Dispacther\n");
 		error++;
 	}
 

@@ -20,6 +20,7 @@ extern FILA2 bloqueados_sus;
 extern TCB_t *execute;
 /*extern csem_t semafaro;*/
 extern TCB_t threadMain;
+extern ucontext_t finalThreadAddress, dispatchAddress;
 
 /*-------------------------------------------------------------------
 Função:	Retorna 0 se o tid passado se encontra na fila passado como
@@ -146,7 +147,7 @@ int nextApto(){
 				return -3;
 			}
 			else{
-				return dispatch(execute,OldNode);
+				return 0;
       }
 		}
 	}
