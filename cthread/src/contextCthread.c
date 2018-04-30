@@ -67,7 +67,7 @@ int ccreate (void *(*start)(void *), void *arg, int prio){
   getcontext(&(newThread->context));
 
 	//Aqui receberemos o endereço da thread final
-	newThread->context.uc_link = execute->context.uc_link;
+	newThread->context.uc_link = &execute->context;
 	newThread->context.uc_stack.ss_sp = stackMem;
 	newThread->context.uc_stack.ss_size = sizeof stackMem;
 
@@ -109,15 +109,13 @@ int ccreate (void *(*start)(void *), void *arg, int prio){
 }
 
 
-int dispatch(TCB_t* oldNode, TCB_t *newNode){
-	printf("dispatcher entrou\n");
+int dispatch( TCB_t *newNode,TCB_t* oldNode){
+	printf("\n dispatcher entrou\n");
+	printf("thread velha : %p thread nova : %p\n", oldNode->context, newNode ->context);
+	swapcontext(&(oldNode->context),&(newNode->context));
+	
+	printf("swap\n");
 
-	getcontext(&(newNode->context));
-	printf("dispatcher getcontext\n");
-
-
-	setcontext(&(oldNode->context));
-	printf("dispatcher set\n");
 	return 0;
 
 
