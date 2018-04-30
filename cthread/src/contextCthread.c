@@ -134,7 +134,7 @@ int ccreate (void *(*start)(void *), void *arg, int prio){
 }
 
 
-int dispatch(){
+void dispatch(){
 	printf("\n dispatcher entrou\n");
 	nextApto();
 	if(nextApto() == 0){
@@ -147,15 +147,7 @@ int dispatch(){
 
 
 
-int initDispatch(){
-	
-	getcontext(&dispatchAddress);
-	dispatchAddress.uc_link = 0;
-	dispatchAddress.uc_stack.ss_sp = (char*) malloc(stackSize);
-	dispatchAddress.uc_stack.ss_size = stackSize;
-	makecontext(&dispatchAddress, (void(*)(void))dispatch, 0);
-	return 0;
-}
+
 
 
 

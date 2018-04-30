@@ -21,7 +21,7 @@ extern TCB_t *execute;
 /*extern csem_t semafaro; */
 extern TCB_t threadMain;
 extern ucontext_t finalThreadAddress, dispatchAddress;
-
+extern char stackMem[64000];
 /*#define RESOURCE 1 */
 
 
@@ -114,7 +114,7 @@ int cjoin(int tid){
             return -1; /*existem outro processo que esta aguardando esse mesmo tid*/
         else{
             execute->waintingJoin = tid;
-			swapcontext(&execute->context, &dispatch_ctx);
+			swapcontext(&execute->context, &dispatchAddress);
             if (shiftNextApto(&bloqueados) != 0)
 				return -3;
 			else{
@@ -146,6 +146,16 @@ int csem_init (csem_t *sem, int count){
 		return -1;
 	sem -> count = count;
 	sem -> fila = &thrBlocSem;
+	return 0;
+}
+
+int initDispatch(){
+	
+	getcontext(&dispatchAddress);
+	dispatchAddress.uc_link = 0;
+	dispatchAddress.uc_stack.ss_sp = stackMem;
+	dispatchAddress.uc_stack.ss_size = sizeof stackMem;
+	makecontext(&dispatchAddress, (void(*)(void))dispatch, 0);
 	return 0;
 }
 
