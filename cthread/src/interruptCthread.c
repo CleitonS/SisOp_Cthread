@@ -35,10 +35,6 @@ extern TCB_t threadMain;
  ******************************************************************************/
 
 int csuspend(int tid){
-
-
-    checkMainThread();
-
     if(execute->tid == tid) return -1;
 
     if(findInFila(tid,&bloqueados) == 0){
@@ -66,9 +62,6 @@ Erro -2 => Nao achou a Thread a ser liberada
  ******************************************************************************/
 int cresume(int tid){
 
-
-    checkMainThread();
-
     if(findInFila(tid,&bloqueados_sus) == 0){
         shiftFilas(&bloqueados,&bloqueados_sus,tid);
         return 0;
@@ -93,12 +86,8 @@ int cresume(int tid){
 	Se erro	   => Valor negativo.
  */
 int cwait(csem_t *sem){
-
-
-    checkMainThread();
-
     if(sem->count <= 0){
-
+    
         insertInFila(sem->fila,execute);//adiciona a fila interna do semaforo
         shiftNextApto(&bloqueados);
         return -1;
@@ -117,30 +106,29 @@ int cwait(csem_t *sem){
 	Se erro	   => Valor negativo.
  ******************************************************************************/
 int csignal(csem_t *sem){
-
-
-  	checkMainThread();
-
 	TCB_t *thread = (TCB_t *) malloc(sizeof(TCB_t));
-    sem -> count ++;
+    sem -> count ++;	
     if(FirstFila2(sem -> fila) != 0){
         thread = GetAtIteratorFila2(sem->fila);
-
-        shiftFilas(&bloqueados,&aptos,thread->tid);
-        DeleteAtIteratorFila2(sem->fila);//remove da fila do semafaro e passa para estado de apto
-
-
+		
+        if(shiftFilas(&bloqueados,&aptos,thread->tid)){
+       		 DeleteAtIteratorFila2(sem->fila);//remove da fila do semafaro e passa para estado de apto
+		return 0;
+	}
+        else return -2;
+        
     }
+    else return -1;
 
 
 }
 /*Retorno:
 Quando executada corretamente: retorna 0 (zero) Caso contrário, retorna um valor negativo.*/
 int cyield(void){
-    checkMainThread();
-
     if( shiftNextApto(&aptos) == 0)
         return 0;
     return -1;
-
+    
 }
+
+
