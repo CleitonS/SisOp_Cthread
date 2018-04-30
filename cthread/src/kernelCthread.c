@@ -1,6 +1,6 @@
 //
 //  KernelCthread.c
-//  
+//
 //
 //  Created by Cleiton on 10/04/18.
 //
@@ -27,7 +27,7 @@ extern TCB_t threadMain;
 
 
 int callScheduler(){
-	
+
 }
 
 
@@ -41,13 +41,16 @@ Retorno:
 		-1 --> Outro processo esta aguardando essa thread
 		-2 --> Thread que estou esperando terminar não foi encontrada
 		-3 --> Erro ao bloquear processo ou executar próximo da fila de aptos.
-	
+
 ******************************************************************************/
 int cjoin(int tid){
 
+
+		checkMainThread();
+
     if (findInFila(tid, &aptos) !=0  && findInFila(tid, &bloqueados)     != 0 &&
 		findInFila(tid, &aptos_sus) != 0 && findInFila(tid, &bloqueados_sus) != 0){
-		/*Thread não encontrada: Não foi criada ou já terminou...*/		
+		/*Thread não encontrada: Não foi criada ou já terminou...*/
         return -2;
     }
     else{
@@ -58,7 +61,7 @@ int cjoin(int tid){
             execute->waintingJoin = tid;
             if (shiftNextApto(&bloqueados) != 0)
 				return -3;
-			else 
+			else
 				return 0;
         }
     }
@@ -69,20 +72,22 @@ int cjoin(int tid){
 
 /******************************************************************************
 Inicializador do semáfaro
-Parâmetros: Ponteiro para a variável global "Semafaro". 
+Parâmetros: Ponteiro para a variável global "Semafaro".
 			Número de dispositivos que o semáfaro controla na sessão crítica
-	
+
 Retorno:
 	Se correto => 0 (zero)
 	Se erro	   => Valor negativo.
 ******************************************************************************/
 int csem_init (csem_t *sem, int count){
+
+	checkMainThread();
 	
 	FILA2 thrBlocSem;
 	if(CreateFila2(&thrBlocSem) != 0)
 		return -1;
 	sem -> count = count;
-	sem -> fila = &thrBlocSem;	
+	sem -> fila = &thrBlocSem;
 	return 0;
 }
 
@@ -95,30 +100,30 @@ Função:	Inicializa todas as estruturas da biblioteca.
 -------------------------------------------------------------------*/
 int initLib(){
 	int error = 0;
-	
+
 	if (CreateFila2(&aptos) != 0){
 		printf("ERROR - Inicializacao da fila de aptos \n");
-		error++;		
+		error++;
 	}
 	if (CreateFila2(&bloqueados)!= 0){
 		printf("ERROR - Inicializacao da fila de bloqueados \n");
-		error++;		
-	}	
+		error++;
+	}
 	if (CreateFila2(&aptos_sus)!= 0){
 		printf("ERROR - Inicializacao da fila de aptos-suspensos \n");
-		error++;		
+		error++;
 	}
 	if (CreateFila2(&bloqueados_sus)!= 0){
 		printf("ERROR - Inicializacao da fila de bloqueados-suspensos \n");
-		error++;		
-	}			
-	
+		error++;
+	}
+
 	if (createThreadMain()!= 0){
 		printf("ERROR - Inicializacao thread main\n");
 		error++;
 	}
-	
-	return error;		
+
+	return error;
 }
 
 
@@ -131,7 +136,7 @@ Retorno:
 	Se correto => 0 (zero)
 	Se erro	   => Valor negativo.
 ******************************************************************************/
-int createThreadMain(){	
+int createThreadMain(){
 	threadMain.tid = 0;
 	threadMain.state = PROCST_EXEC;
 	threadMain.prio = 0;
@@ -139,17 +144,8 @@ int createThreadMain(){
 		return -1;
 	threadMain.waintingJoin = -1;
 	execute = (TCB_t *) malloc(sizeof(TCB_t));
-	execute = (TCB_t *) &threadMain;	
+	execute = (TCB_t *) &threadMain;
 	return 0;
-	
-	
+
+
 }
-
-
-
-
-
-
-
-
-

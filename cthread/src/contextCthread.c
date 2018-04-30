@@ -44,6 +44,8 @@ int ccreate (void *(*start)(void *), void *arg, int prio){
 	TCB_t *newThread;
 
 
+	checkMainThread();
+
 
 	/*Assumindo que o Cechin poderia chamar prio com um valor difernente de zero*/
 	if(prio == 0){
@@ -66,7 +68,7 @@ int ccreate (void *(*start)(void *), void *arg, int prio){
 	newThread->context.uc_link = &finalThreadAddress;
 	newThread->context.uc_stack.ss_sp = stackMem;
 	newThread->context.uc_stack.ss_size = sizeof stackMem;
-	
+
 
 	//Referencia para as atribuições acima se alguém quiser ver.
   //http://nitish712.blogspot.com.br/2012/10/thread-library-using-context-switching.html

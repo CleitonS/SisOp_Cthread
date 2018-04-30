@@ -3,7 +3,7 @@
 //
 //
 //
- 
+
 #include "../src/contextCthread.c"
 #include "../src/kernelCthread.c"
 #include "../src/interruptCthread.c"
@@ -28,7 +28,7 @@ int checkMainThread(){
 
 	if(init != 0){
 		//Já inicializamos com a init
-		return 0; 
+		return 0;
 	}else{
 		if(!initLib()){
 			printf("Thread Main nao estava iniciada e foi criada junto com as filas.\n");
@@ -46,9 +46,13 @@ int checkMainThread(){
 
 
 int cidentify (char *name, int size){
+
+
+  	checkMainThread();
+
 	name = "Bernardo Neuhaus Lignati - 230159 \nCleiton Souza Lima - 262511\nLucas Augusto - 265038 \n";
-	if (sizeof(name) > size) 
+	if (sizeof(name) > size)
 		return -1;
-	else 
+	else
 		return 0;
 }
