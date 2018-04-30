@@ -19,7 +19,8 @@ extern TCB_t *execute;
 /*extern csem_t semafaro; */
 extern TCB_t threadMain;
 
-#define stackMem 64000;
+//#define stackMem 64000;
+char stackMem[64000];
 
 
 ucontext_t finalThreadAddress;
@@ -62,9 +63,10 @@ int ccreate (void *(*start)(void *), void *arg, int prio){
   getcontext(&(newThread->context));
 
 	//Aqui receberemos o endereço da thread final
-	newThread->context.uc_link = finalThreadAddress;
-	newThread->context.uc_stack.ss_size = stackMem;
-	newThread->context.uc_stack.ss_sp = malloc(stackMem);
+	newThread->context.uc_link = &finalThreadAddress;
+	newThread->context.uc_stack.ss_sp = stackMem;
+	newThread->context.uc_stack.ss_size = sizeof stackMem;
+	
 
 	//Referencia para as atribuições acima se alguém quiser ver.
   //http://nitish712.blogspot.com.br/2012/10/thread-library-using-context-switching.html
