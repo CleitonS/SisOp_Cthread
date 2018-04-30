@@ -134,12 +134,24 @@ int ccreate (void *(*start)(void *), void *arg, int prio){
 }
 
 
-int dispatch( TCB_t *newNode,TCB_t* oldNode){
+int dispatch(TCB_t *newNode,TCB_t *oldNode){
 	printf("\n dispatcher entrou\n");
-	printf("thread velha : %p thread nova : %p\n", oldNode->context, newNode ->context);
+	/*printf("thread velha : %p thread nova : %p\n", oldNode->context, newNode ->context);
 	swapcontext(&(oldNode->context),&(newNode->context));
 
 	printf("swap\n");
+*/
+
+	//Salvar contexto do nodo que saiu do execute
+	//getcontext(&oldNode->context);
+
+	swapcontext(&oldNode->context,&newNode->context);
+
+
+	//setcontext(&newNode->context);
+
+	printf("***********************swapped!");
+
 
 	return 0;
 
