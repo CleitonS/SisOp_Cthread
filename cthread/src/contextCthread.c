@@ -67,10 +67,12 @@ int ccreate (void *(*start)(void *), void *arg, int prio){
   getcontext(&(newThread->context));
 
 	//Aqui receberemos o endereço da thread final
-	newThread->context.uc_link = &finalThreadAddress;
+	newThread->context.uc_link = execute->context.uc_link;
 	newThread->context.uc_stack.ss_sp = stackMem;
 	newThread->context.uc_stack.ss_size = sizeof stackMem;
 
+
+	printf("LINK DA NOVA FUNCAO CRIADA=%d\n",(int)newThread->context.uc_link);
 
 	//Referencia para as atribuições acima se alguém quiser ver.
   //http://nitish712.blogspot.com.br/2012/10/thread-library-using-context-switching.html
@@ -106,36 +108,18 @@ int ccreate (void *(*start)(void *), void *arg, int prio){
 
 }
 
-/*Função que faz o despacho da fila de apto para executando
-retorna 0 caso dê tudo certo, c.c valor negativo*/
-int dispatch(){
 
-	TCB_t *nextThreadToCPU = NULL;
+int dispatch(TCB_t* oldNode, TCB_t *newNode){
+	printf("dispatcher entrou\n");
 
-	/*verificar se a fila de aptos contém algo. Por default, se
-	retornar zero, tem algo!*/
-	if(FirstFila2(&aptos) == 0){
-		/*Pegar o que está executando, e trocar pelo primeiro da fila*/
-		/*Pegar o conteúdo do primeiro cara a ser executado!*/
-		if(GetAtIteratorFila2(&aptos)!= NULL){
-			nextThreadToCPU = (TCB_t*) GetAtIteratorFila2(&aptos);
-			/*Nova execução recebe o primeiro da fila de aptos*/
-			execute = nextThreadToCPU;
+	getcontext(&(newNode->context));
+	printf("dispatcher getcontext\n");
 
-			/*Remover ponteiro do primeiro da fila de aptos, pois foi para CPU*/
-			if(FirstFila2(&aptos)==0){
-				if(DeleteAtIteratorFila2(&aptos) == 0){
-					setcontext(&execute->context);
-					return 0;
-				}
-			}
-		}
 
-	}else{
-		printf("Não há mais threads a serem executadas!\n");
-	}
+	setcontext(&(oldNode->context));
+	printf("dispatcher set\n");
+	return 0;
 
-	//Retorno de erro -3 caso não der para executar o dispatch.
-	return -3;
+
 
 }

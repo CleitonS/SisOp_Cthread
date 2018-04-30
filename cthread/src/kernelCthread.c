@@ -47,7 +47,7 @@ int shiftNextApto(FILA2 *fila){
       if (nextApto() != 0)
         return -2;
       else
-        return dispatch();
+        return -3; //VER AQUI onde tinha o dispatch
     }
 
 
@@ -66,9 +66,14 @@ int createThreadMain(){
 	threadMain.tid = 0;
 	threadMain.state = PROCST_EXEC;
 	threadMain.prio = 0;
+
 	if (getcontext(&(threadMain.context)) != 0)
 		return -1;
 	threadMain.waintingJoin = -1;
+  threadMain.context.uc_link = 0;
+
+  printf("LINK DA MAIN=%d",(int)  threadMain.context.uc_link);
+
 	execute = (TCB_t *) malloc(sizeof(TCB_t));
 	execute = (TCB_t *) &threadMain;
 	return 0;
@@ -95,9 +100,11 @@ int cjoin(int tid){
 
 		checkMainThread();
 
+    printf("passoucheckmain");
     if (findInFila(tid, &aptos) !=0  && findInFila(tid, &bloqueados)     != 0 &&
 		findInFila(tid, &aptos_sus) != 0 && findInFila(tid, &bloqueados_sus) != 0){
 		/*Thread não encontrada: Não foi criada ou já terminou...*/
+        printf("passou");
         return -2;
     }
     else{
