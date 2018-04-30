@@ -90,9 +90,9 @@ int ccreate (void *(*start)(void *), void *arg, int prio){
 
 	//InsertInFIla r'etorna 0 caso for inicializado com sucesso.
 	if(!insertInFila(&aptos,newThread)){
-		printf("Thread inserida na fila! Yey (isso me lembrou o johann)");
+		printf("Thread inserida na fila!\n");
 	} else{
-		printf("Erro na inserção da thread na fila");
+		printf("Erro na inserção da thread na fila\n");
 		return -2;
 	}
 
