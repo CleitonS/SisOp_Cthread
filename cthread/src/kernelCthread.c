@@ -177,5 +177,10 @@ int initLib(){
 		error++;
 	}
 
+  if(instantiateFinalThread()!=0){
+    printf("ERROR - Inicializacao da Thread final\n");
+    error++;
+  }
+
 	return error;
 }

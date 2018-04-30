@@ -13,6 +13,7 @@
 
 extern int init;
 extern int checkMainThread();
+extern int finishThread();
 extern FILA2 aptos;
 extern FILA2 bloqueados;
 extern FILA2 aptos_sus;
@@ -29,6 +30,29 @@ ucontext_t finalThreadAddress;
 
 
 int idCounter = 0;
+
+
+
+
+/*Função que inicia a thread finalizadora, para que todos as outras
+threads possam apontar para ela. Essa thread recebe uma função
+endJob, que finaliza a thread.
+Retorna 0 se ocorrer tudo certo.*/
+
+int instantiateFinalThread(){
+
+	getcontext(&finalThreadAddress);
+
+	finalThreadAddress.uc_link = 0;
+	finalThreadAddress.uc_stack.ss_sp = stackMem;
+	finalThreadAddress.uc_stack.ss_size = sizeof stackMem;
+
+	//Aqui, colocamos a função endJob para a thread final!
+	makecontext(&finalThreadAddress,(void(*)(void))finishThread, 0);
+
+	return 0;
+
+}
 
 
 
@@ -67,7 +91,8 @@ int ccreate (void *(*start)(void *), void *arg, int prio){
   getcontext(&(newThread->context));
 
 	//Aqui receberemos o endereço da thread final
-	newThread->context.uc_link = &execute->context;
+	newThread->context.uc_link = &finalThreadAddress;
+
 	newThread->context.uc_stack.ss_sp = stackMem;
 	newThread->context.uc_stack.ss_size = sizeof stackMem;
 
@@ -113,7 +138,7 @@ int dispatch( TCB_t *newNode,TCB_t* oldNode){
 	printf("\n dispatcher entrou\n");
 	printf("thread velha : %p thread nova : %p\n", oldNode->context, newNode ->context);
 	swapcontext(&(oldNode->context),&(newNode->context));
-	
+
 	printf("swap\n");
 
 	return 0;
