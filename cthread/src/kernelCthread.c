@@ -113,12 +113,12 @@ int cjoin(int tid){
 			findOtherJoin(tid, &aptos_sus) != 0 && findOtherJoin(tid, &bloqueados_sus) != 0 )
             return -1; /*existem outro processo que esta aguardando esse mesmo tid*/
         else{
-            execute->waintingJoin = tid;			
+            execute->waintingJoin = tid;
             if (shiftNextApto(&bloqueados) != 0)
 				return -3;
 			else{
 				swapcontext(&execute->context, &dispatchAddress);
-				
+
 				return 0;
 			}
         }
@@ -150,7 +150,7 @@ int csem_init (csem_t *sem, int count){
 }
 
 int initDispatch(){
-	
+
 	getcontext(&dispatchAddress);
 	dispatchAddress.uc_link = 0;
 	dispatchAddress.uc_stack.ss_sp = stackMem;
@@ -185,8 +185,8 @@ int initLib(){
 		printf("ERROR - Inicializacao da fila de bloqueados-suspensos \n");
 		error++;
 	}
-	
-	
+
+
 	if (initDispatch()!= 0){
 		printf("ERROR - Inicializacao Dispacther\n");
 		error++;

@@ -12,7 +12,7 @@
 #include "../include/cdata.h"
 #include "../include/support.h"
 
-extern void dispatch();
+extern void dispatch(TCB_t* oldNode, TCB_t* newExecuteNode);
 extern FILA2 aptos;
 extern FILA2 bloqueados;
 extern FILA2 aptos_sus;
@@ -147,6 +147,7 @@ int nextApto(){
 				return -3;
 			}
 			else{
+        dispatch(OldNode,execute);
 				return 0;
       }
 		}

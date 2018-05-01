@@ -134,14 +134,12 @@ int ccreate (void *(*start)(void *), void *arg, int prio){
 }
 
 
-void dispatch(){
+void dispatch(TCB_t* oldNode, TCB_t* newExecuteNode){
 	printf("\n dispatcher entrou\n");
-	setcontext(&execute->context);
-/*
-	if(nextApto() == 0){
 
-		
-	}
-	else
-		printf("erro dispatch\n");*/
+
+	newExecuteNode->state = PROCST_EXEC;
+
+	swapcontext(&oldNode->context,&newExecuteNode->context);
+
 }
