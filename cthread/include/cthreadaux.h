@@ -147,11 +147,7 @@ int nextApto(){
 				return -3;
 			}
 			else{
-<<<<<<< Updated upstream
-        printf("cjoin retornando zero\n");
-=======
 				dispatch(OldNode);
->>>>>>> Stashed changes
 				return 0;
       			}
 		}

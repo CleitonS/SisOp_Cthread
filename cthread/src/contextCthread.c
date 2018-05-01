@@ -157,7 +157,7 @@ void dispatch(TCB_t * oldDispatch){
 	printf("<-fila \n  thread a ser escalonada=%d\n",execute->tid);
 		printf("1");
 	if(oldDispatch != NULL)
-		swapcontext(&(oldDispatch->context),&(execute->context));
+		swapcontext(&(execute->context),&(oldDispatch->context));
 	else
 		setcontext(&(execute->context));
 

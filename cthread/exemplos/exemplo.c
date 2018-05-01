@@ -15,13 +15,7 @@ void* func0(void *arg)
 
     printf("ID0: 2: Eu sou a thread ID0 imprimindo count do semáforo: %d\n", ((csem_t *)arg)->count);
 
-<<<<<<< Updated upstream
-void* func1(void *arg) {
-	printf("Eu sou a thread ID1 imprimindo %d\n", *((int *)arg));
-	printf("leiteeee");
-=======
     return 0;
->>>>>>> Stashed changes
 }
 
 void* func1(void *arg)
@@ -61,18 +55,12 @@ int main (int argc, char *argv[])
         printf("MAIN: Eu sou a main após a criação de ID0, ID1\n");
         cjoin(id2);
 
-<<<<<<< Updated upstream
-	cjoin(id0);
- 	cjoin(id1);
-  //cjoin(id3);
-=======
         printf("MAIN: Eu sou a main voltando para terminar o programa \n");
     }
     else
     {
         printf("MAIN: Erro ao criar o semáforo!\n");
     }
->>>>>>> Stashed changes
 
     return 0;
 }
