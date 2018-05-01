@@ -48,6 +48,7 @@ int shiftNextApto(FILA2 *fila){
       if (nextApto() != 0)
         return -2;
       else
+	swapcontext(&execute->context, &dispatchAddress);
         return 0; //VER AQUI onde tinha o dispatch. ....
     }
 
@@ -117,7 +118,7 @@ int cjoin(int tid){
             if (shiftNextApto(&bloqueados) != 0)
 				return -3;
 			else{
-				swapcontext(&execute->context, &dispatchAddress);
+				
 
 				return 0;
 			}
