@@ -40,7 +40,7 @@ int csuspend(int tid){
     checkMainThread();
 
     if(execute->tid == tid) return -1;
-    if(findInFila(tid,&aptos_sus || findInFila(bloqueados_sus))
+    if(findInFila(tid,&aptos_sus) || findInFila(tid,&bloqueados_sus))
        return 0;
 
     if(findInFila(tid,&bloqueados) == 0){
