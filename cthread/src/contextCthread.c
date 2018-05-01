@@ -142,7 +142,7 @@ void dispatch(TCB_t * oldDispatch){
 		
 	if(FirstFila2(&aptos) == 0){
 		//printf("Old nao 'e null");
-		swapcontext(&(oldDispatch->context),&(execute->context));
+		setcontext(&(execute->context));
 	}
 
 

@@ -71,7 +71,7 @@ Retorno:
 ******************************************************************************/
 int createThreadMain(){
 	threadMain.tid = 0;
-	threadMain.state = 0;
+	threadMain.state = PROCST_EXEC;
 	threadMain.prio = 0;
 	
 	if (getcontext(&(threadMain.context)) != 0)

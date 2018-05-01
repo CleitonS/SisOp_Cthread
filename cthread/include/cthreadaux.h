@@ -231,7 +231,7 @@ ERROS:
 
 -------------------------------------------------------------------*/
 int finishThread(){
-	TCB_t* novaThreadExecutar = NULL;
+	TCB_t* novaThreadExecutar = (TCB_t *) malloc(sizeof(TCB_t));
 	TCB_t *node = (TCB_t *) malloc(sizeof(TCB_t));
 	int tidWaiting;
 	printf("----------------\nmatando thread\n---------------------\n");
@@ -263,44 +263,21 @@ int finishThread(){
 	printf("\n");
 	
 	if (FirstFila2(&aptos) != 0){
-		/*printf("--------------------\n");
-		printf("1\n");
-		printFila(&aptos);
-		DeleteAtIteratorFila2(&aptos);
-		printFila(&aptos);
-		printf("---------------------\n");*/
-		//if (FirstFila2(&aptos) != 0){
 			printf("ta vazio");
 			setcontext(mainContext);
 			return 0;
 			
-		/*}
-		else{
-		    printf("Thread de TID = %d terminando\n",execute->tid);
-		    printFila(&aptos);	
-		    printf("\n");
-		    free(execute);
-		    execute = NULL;
-		    FirstFila2(&aptos);
-		    novaThreadExecutar = (TCB_t*) GetAtIteratorFila2(&aptos);
-		    execute = novaThreadExecutar;
-		    printf("Nova Thread pos Kill : %d",execute->tid); 
-		    DeleteAtIteratorFila2(&aptos);
-		    setcontext(&(execute->context));
-		    printf("2");
-		    return 0;
-		}*///
 	}
-	else{	    
-	    printf("Thread de TID = %d terminandddddddo\n",execute->tid);
-		   FirstFila2(&aptos);
-	  	   novaThreadExecutar = GetAtIteratorFila2(&aptos);
-		   DeleteAtIteratorFila2(&aptos);
-		   printFila(&aptos);
-		   execute = novaThreadExecutar;
-		   setcontext(&(execute->context)); 
+	else{	
+	    FirstFila2(&aptos);    
+	    novaThreadExecutar = GetAtIteratorFila2(&aptos);
+	    free(execute);
+	    execute = novaThreadExecutar;
+            DeleteAtIteratorFila2(&aptos);
+		   
+            finalThreadAddress.uc_link = &(execute->context); 
 	  
-		    return 0;
+            return 0;
 	
  	 }
 	printf("fugi de todos os retornos");
