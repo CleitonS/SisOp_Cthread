@@ -29,8 +29,12 @@ Retorna zero se tudo estiver certo, e negativo caso contrário.*/
 
 int checkMainThread(){
 
+
+	printf("Entrou na funcao checkmain\n");
+
 	if(init != 0){
 		//Já inicializamos com a init
+		printf("checkmain já inicializada\n");
 		return 0;
 	}else{
 		if(!initLib()){

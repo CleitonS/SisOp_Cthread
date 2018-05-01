@@ -12,7 +12,7 @@
 #include "../include/cdata.h"
 #include "../include/support.h"
 
-extern void dispatch(TCB_t* oldNode, TCB_t* newExecuteNode);
+extern void dispatch();
 extern FILA2 aptos;
 extern FILA2 bloqueados;
 extern FILA2 aptos_sus;
@@ -147,7 +147,9 @@ int nextApto(){
 				return -3;
 			}
 			else{
-        dispatch(OldNode,execute);
+        printf("\nca estou eu antes de swapcontext\n");
+       swapcontext(&OldNode->context,&dispatchAddress);
+        printf("\nca estou eu depois de swapcontext\n");
 				return 0;
       }
 		}
@@ -239,8 +241,14 @@ int finishThread(){
 	}
 	if (nextApto() != 0)
 		return -3;
-	else
+	else{
+    printf("Thread de TID=%d terminando\n",execute->tid);
+    free(execute);
+    execute = NULL;
+    dispatch();
     return 0;
+  }
+
 }
 
 

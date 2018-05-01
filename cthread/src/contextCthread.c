@@ -83,7 +83,7 @@ int ccreate (void *(*start)(void *), void *arg, int prio){
 
 	newThread = (TCB_t*) malloc(sizeof(TCB_t));
 	newThread->tid = idCounter;
-	newThread->prio = prio; //(ou sempre zero?)
+	newThread->prio = 0; //(ou sempre zero?)
 	newThread->state = PROCST_APTO;
 	newThread->waintingJoin= -1;
 
@@ -134,12 +134,21 @@ int ccreate (void *(*start)(void *), void *arg, int prio){
 }
 
 
-void dispatch(TCB_t* oldNode, TCB_t* newExecuteNode){
+void dispatch(){
 	printf("\n dispatcher entrou\n");
 
+	if (FirstFila2(&aptos) == 0) {
+		TCB_t* novaThreadExecutar = NULL;
+		if(GetAtIteratorFila2(&aptos) != NULL){
+			novaThreadExecutar = (TCB_t*) GetAtIteratorFila2(&aptos);
+			execute = novaThreadExecutar;
+			if(execute == NULL){
+				printf("sem threads para executar.\n");
+			}
+		}
+	}
+	printf("proxima thread a ser escalonada=%d\n",execute->tid);
+	setcontext(&execute->context);
 
-	newExecuteNode->state = PROCST_EXEC;
-
-	swapcontext(&oldNode->context,&newExecuteNode->context);
 
 }

@@ -2,7 +2,7 @@
 /*
  *	Programa de exemplo de uso da biblioteca cthread
  *
- *	Versão 1.0 - 14/04/2016
+ *	Versï¿½o 1.0 - 14/04/2016
  *
  *	Sistemas Operacionais I - www.inf.ufrgs.br
  *
@@ -21,19 +21,26 @@ void* func1(void *arg) {
 	printf("Eu sou a thread ID1 imprimindo %d\n", *((int *)arg));
 }
 
+
+void* func3(void *arg) {
+	printf("Eu sou a thread ID3 imprimindo %d\n", *((int *)arg));
+}
+
+
 int main(int argc, char *argv[]) {
 
-	int	id0, id1;
+	int	id0, id1, id3;
 	int i;
 
 	id0 = ccreate(func0, (void *)&i, 0);
 	id1 = ccreate(func1, (void *)&i, 0);
+	id3 = ccreate(func3, (void *)&i, 0);
 
-	printf("Eu sou a main após a criação de ID0 e ID1\n");
+	printf("Eu sou a main apï¿½s a criaï¿½ï¿½o de ID0 e ID1\n");
 
 	cjoin(id0);
-	cjoin(id1);
+ 	//cjoin(id1);
+  //cjoin(id3);
 
 	printf("Eu sou a main voltando para terminar o programa\n");
 }
-

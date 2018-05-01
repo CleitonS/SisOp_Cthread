@@ -41,15 +41,20 @@ ERROS:
 
 -------------------------------------------------------------------*/
 int shiftNextApto(FILA2 *fila){
-
+    //         printf("\nca estou eu antes de swapcontext\n");
+    // swapcontext(&execute->context,&dispatchAddress);
+    //         printf("\nca estou eu depois de swapcontext\n");
     if (insertInFila(fila, execute) != 0 )
       return -1;
     else {
-      if (nextApto() != 0)
-        return -2;
-      else
-	swapcontext(&execute->context, &dispatchAddress);
-        return 0; //VER AQUI onde tinha o dispatch. ....
+      if(!nextApto()){
+        return 0;
+      }
+
+      return -2;
+      // else
+	    //   swapcontext(&execute->context, &dispatchAddress);
+      //   return 0; //VER AQUI onde tinha o dispatch. ....
     }
 
 
@@ -99,6 +104,7 @@ Retorno:
 ******************************************************************************/
 int cjoin(int tid){
 
+    TCB_t * atualcontext = NULL;
 
 		checkMainThread();
 
@@ -115,11 +121,11 @@ int cjoin(int tid){
             return -1; /*existem outro processo que esta aguardando esse mesmo tid*/
         else{
             execute->waintingJoin = tid;
+            //salvar execute atual
+            atualcontext = execute;
             if (shiftNextApto(&bloqueados) != 0)
 				return -3;
 			else{
-				
-
 				return 0;
 			}
         }
@@ -156,7 +162,7 @@ int initDispatch(){
 	dispatchAddress.uc_link = 0;
 	dispatchAddress.uc_stack.ss_sp = stackMem;
 	dispatchAddress.uc_stack.ss_size = sizeof stackMem;
-	makecontext(&dispatchAddress, (void(*)(void))dispatch, 0);
+	makecontext(&dispatchAddress, (void(*)(void))dispatch,0);
 	return 0;
 }
 
