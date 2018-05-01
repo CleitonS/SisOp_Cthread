@@ -1,47 +1,79 @@
-
-/*
- *	Programa de exemplo de uso da biblioteca cthread
- *
- *	Vers�o 1.0 - 14/04/2016
- *
- *	Sistemas Operacionais I - www.inf.ufrgs.br
- *
- */
-
-#include "../include/support.h"
 #include "../include/cthread.h"
+#include "../include/cdata.h"
 #include <stdio.h>
+#include <stdlib.h>
 
-void* func0(void *arg) {
-	printf("Eu sou a thread ID0 imprimindo %d\n", *((int *)arg));
-	return;
-}
+void* func0(void *arg)
+{
+    cwait((csem_t *)arg);
 
+    printf("ID0: 1: Eu sou a thread ID0 imprimindo count do semáforo: %d\n", ((csem_t *)arg)->count);
+
+    cyield();
+
+    csignal((csem_t *)arg);
+
+    printf("ID0: 2: Eu sou a thread ID0 imprimindo count do semáforo: %d\n", ((csem_t *)arg)->count);
+
+<<<<<<< Updated upstream
 void* func1(void *arg) {
 	printf("Eu sou a thread ID1 imprimindo %d\n", *((int *)arg));
 	printf("leiteeee");
+=======
+    return 0;
+>>>>>>> Stashed changes
 }
 
+void* func1(void *arg)
+{
+    printf("ID1: 1: Eu sou a thread ID1 imprimindo count do semáforo: %d\n", ((csem_t *)arg)->count);
 
-void* func3(void *arg) {
-	printf("Eu sou a thread ID3 imprimindo %d\n", *((int *)arg));
+    cwait((csem_t *)arg);
+
+    printf("ID1: 2: Eu sou a thread ID1 imprimindo count do semáforo: %d\n", ((csem_t *)arg)->count);
+
+    return 0;
 }
 
+void* func2(void *arg)
+{
+    printf("ID2: 1: Eu sou a thread ID2 imprimindo count do semáforo: %d\n", ((csem_t *)arg)->count);
 
-int main(int argc, char *argv[]) {
+    cwait((csem_t *)arg);
 
-	int	id0, id1, id3;
-	int i;
+    printf("ID2: 2: Eu sou a thread ID2 imprimindo count do semáforo: %d\n", ((csem_t *)arg)->count);
 
-	id0 = ccreate(func0, (void *)&i, 0);
-	id1 = ccreate(func1, (void *)&i, 0);
-	id3 = ccreate(func3, (void *)&i, 0);
+    return 0;
+}
 
-	printf("Eu sou a main ap�s a cria��o de ID0 e ID1\n");
+int main (int argc, char *argv[])
+{
+    char name[200];
+    int id0, id1, id2;
+    csem_t semaforo1;
 
+    if(csem_init(&semaforo1, 1) == 0)
+    {
+        id0 = ccreate(func0, (void*)&semaforo1, 0);
+        id1 = ccreate(func1, (void*)&semaforo1, 0);
+        id2 = ccreate(func2, (void*)&semaforo1, 0);
+
+        printf("MAIN: Eu sou a main após a criação de ID0, ID1\n");
+        cjoin(id2);
+
+<<<<<<< Updated upstream
 	cjoin(id0);
  	cjoin(id1);
   //cjoin(id3);
+=======
+        printf("MAIN: Eu sou a main voltando para terminar o programa \n");
+    }
+    else
+    {
+        printf("MAIN: Erro ao criar o semáforo!\n");
+    }
+>>>>>>> Stashed changes
 
-	printf("Eu sou a main voltando para terminar o programa\n");
+    return 0;
 }
+

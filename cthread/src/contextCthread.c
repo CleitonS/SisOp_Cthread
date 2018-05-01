@@ -134,22 +134,31 @@ int ccreate (void *(*start)(void *), void *arg, int prio){
 }
 
 
-void dispatch(){
+void dispatch(TCB_t * oldDispatch){
 	printf("\n dispatcher entrou\n");
 
 	if (FirstFila2(&aptos) == 0) {
 		TCB_t* novaThreadExecutar = NULL;
 		if(GetAtIteratorFila2(&aptos) != NULL){
+<<<<<<< Updated upstream
 			printf("atribuindo nova thread com o que tem em apto\n");
 			novaThreadExecutar = (TCB_t*) GetAtIteratorFila2(&aptos);
 			execute = novaThreadExecutar;
+=======
+			novaThreadExecutar = (TCB_t*) GetAtIteratorFila2(&aptos);//pedaco do escalonador na dispactch
+>>>>>>> Stashed changes
 			if(execute == NULL){
-				printf("sem threads para executar.\n");
+				execute = novaThreadExecutar;
+				DeleteAtIteratorFila2(&aptos);
 			}
 		}
 	}
-	printf("proxima thread a ser escalonada=%d\n",execute->tid);
-	setcontext(&execute->context);
-
+	printFila(&aptos);
+	printf("<-fila \n  thread a ser escalonada=%d\n",execute->tid);
+		printf("1");
+	if(oldDispatch != NULL)
+		swapcontext(&(oldDispatch->context),&(execute->context));
+	else
+		setcontext(&(execute->context));
 
 }

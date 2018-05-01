@@ -12,7 +12,7 @@
 #include "../include/cdata.h"
 #include "../include/support.h"
 
-extern void dispatch();
+extern void dispatch(TCB_t * oldDispatch);
 extern FILA2 aptos;
 extern FILA2 bloqueados;
 extern FILA2 aptos_sus;
@@ -147,9 +147,13 @@ int nextApto(){
 				return -3;
 			}
 			else{
+<<<<<<< Updated upstream
         printf("cjoin retornando zero\n");
+=======
+				dispatch(OldNode);
+>>>>>>> Stashed changes
 				return 0;
-      }
+      			}
 		}
 	}
 }
@@ -221,31 +225,46 @@ ERROS:
 int finishThread(){
 	TCB_t *node = (TCB_t *) malloc(sizeof(TCB_t));
 	int tidWaiting;
-
+	printf("----------------\nmatando thread\n---------------------\n");
 	tidWaiting =  findOtherJoin(execute->tid, &bloqueados);
+	printf("sai da find other join");
 	if (tidWaiting != 0){
 		if (tidWaiting == -1)
 			tidWaiting = 0;
 
-		if (findInFila(tidWaiting, &bloqueados) != 0)
+		if (findInFila(tidWaiting, &bloqueados) != 0){
+			printf("cai do primeiro return");
 			return -1;
+		}	
+		printf("passei do primeiro return");
 		node = GetAtIteratorFila2(&bloqueados);
-		if (node -> waintingJoin != execute->tid)
+		if (node -> waintingJoin != execute->tid){
+			printf("here");
 			return -2;
+		}
 		else{
 			node -> waintingJoin = -1;
+			printf("\n\naqui\n\n");
 			shiftFilas(&aptos, &bloqueados, node->tid);
+			printf("\n\naqui\n\n");
 		}
 	}
-	if (nextApto() != 0)
+	printf("here baby\n");
+	
+	if (FirstFila2(&aptos) != 0){
+		printf("1");
 		return -3;
+	}
 	else{
-    printf("Thread de TID=%d terminando\n",execute->tid);
-    free(execute);
-    execute = NULL;
-    dispatch();
-    return 0;
-  }
+	    printf("Thread de TID=%d terminando\n",execute->tid);
+	    free(execute);
+	    execute = NULL;
+	    dispatch(execute);
+		printf("2");
+	    return 0;
+ 	 }
+	printf("fugi de todos os retornos");
+	return -40;
 
 }
 
