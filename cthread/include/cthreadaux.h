@@ -11,7 +11,7 @@
 
 #include "../include/cdata.h"
 #include "../include/support.h"
-
+#include <stdlib.h>
 extern void dispatch(TCB_t * oldDispatch);
 extern FILA2 aptos;
 extern FILA2 bloqueados;
@@ -21,6 +21,7 @@ extern TCB_t *execute;
 /*extern csem_t semafaro;*/
 extern TCB_t threadMain;
 extern ucontext_t finalThreadAddress, dispatchAddress;
+extern ucontext_t* mainContext;
 
 /*-------------------------------------------------------------------
 Função:	Retorna 0 se o tid passado se encontra na fila passado como
@@ -192,7 +193,18 @@ int shiftFilas(FILA2 *filaIn, FILA2 *filaOut, int tidOut){
 	return 0;
 }
 
-
+void printFila(FILA2 *fila){
+    TCB_t *thread = (TCB_t *) malloc(sizeof(TCB_t));
+	if (FirstFila2(fila) != 0)
+        printf("ERRO - fila vazia\n");
+    else{
+        while (GetAtIteratorFila2(fila) != NULL){
+			thread = GetAtIteratorFila2(fila);
+			printf("tid: %d, ", thread->tid);
+			NextFila2(fila);
+        }
+    }
+}
 
 
 
@@ -219,6 +231,7 @@ ERROS:
 
 -------------------------------------------------------------------*/
 int finishThread(){
+	TCB_t* novaThreadExecutar = NULL;
 	TCB_t *node = (TCB_t *) malloc(sizeof(TCB_t));
 	int tidWaiting;
 	printf("----------------\nmatando thread\n---------------------\n");
@@ -245,19 +258,50 @@ int finishThread(){
 			printf("\n\naqui\n\n");
 		}
 	}
-	printf("here baby\n");
+	printf("\ncomeca a desalocar execute:%d\n",execute -> tid);
+	printFila(&aptos);
+	printf("\n");
 	
 	if (FirstFila2(&aptos) != 0){
-		printf("1");
-		return -3;
+		/*printf("--------------------\n");
+		printf("1\n");
+		printFila(&aptos);
+		DeleteAtIteratorFila2(&aptos);
+		printFila(&aptos);
+		printf("---------------------\n");*/
+		//if (FirstFila2(&aptos) != 0){
+			printf("ta vazio");
+			setcontext(mainContext);
+			return 0;
+			
+		/*}
+		else{
+		    printf("Thread de TID = %d terminando\n",execute->tid);
+		    printFila(&aptos);	
+		    printf("\n");
+		    free(execute);
+		    execute = NULL;
+		    FirstFila2(&aptos);
+		    novaThreadExecutar = (TCB_t*) GetAtIteratorFila2(&aptos);
+		    execute = novaThreadExecutar;
+		    printf("Nova Thread pos Kill : %d",execute->tid); 
+		    DeleteAtIteratorFila2(&aptos);
+		    setcontext(&(execute->context));
+		    printf("2");
+		    return 0;
+		}*///
 	}
-	else{
-	    printf("Thread de TID=%d terminando\n",execute->tid);
-	    free(execute);
-	    execute = NULL;
-	    dispatch(execute);
-		printf("2");
-	    return 0;
+	else{	    
+	    printf("Thread de TID = %d terminandddddddo\n",execute->tid);
+		   FirstFila2(&aptos);
+	  	   novaThreadExecutar = GetAtIteratorFila2(&aptos);
+		   DeleteAtIteratorFila2(&aptos);
+		   printFila(&aptos);
+		   execute = novaThreadExecutar;
+		   setcontext(&(execute->context)); 
+	  
+		    return 0;
+	
  	 }
 	printf("fugi de todos os retornos");
 	return -40;
@@ -265,18 +309,7 @@ int finishThread(){
 }
 
 
-void printFila(FILA2 *fila){
-    TCB_t *thread = (TCB_t *) malloc(sizeof(TCB_t));
-	if (FirstFila2(fila) != 0)
-        printf("ERRO - fila vazia\n");
-    else{
-        while (GetAtIteratorFila2(fila) != NULL){
-			thread = GetAtIteratorFila2(fila);
-			printf("tid: %d, ", thread->tid);
-			NextFila2(fila);
-        }
-    }
-}
+
 
 
 #endif

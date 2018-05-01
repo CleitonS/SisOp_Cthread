@@ -23,7 +23,7 @@ extern TCB_t threadMain;
 extern ucontext_t finalThreadAddress, dispatchAddress;
 extern char stackMem[64000];
 /*#define RESOURCE 1 */
-
+ucontext_t * mainContext;
 
 /*-------------------------------------------------------------------
 Função:	Insere a thread que esta executando na fila passada por
@@ -71,13 +71,14 @@ Retorno:
 ******************************************************************************/
 int createThreadMain(){
 	threadMain.tid = 0;
-	threadMain.state = PROCST_EXEC;
+	threadMain.state = 0;
 	threadMain.prio = 0;
-
+	
 	if (getcontext(&(threadMain.context)) != 0)
 		return -1;
 	threadMain.waintingJoin = -1;
-  threadMain.context.uc_link = 0;
+  	threadMain.context.uc_link = 0;
+	mainContext = &(threadMain.context);	
 
   printf("LINK DA MAIN=%d",(int)  threadMain.context.uc_link);
 

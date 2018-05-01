@@ -5,7 +5,7 @@
 //  Created by Lucas on 25/04/18.
 //
 //
-
+#include <stdlib.h>
 #include "../include/cdata.h"
 #include "../include/support.h"
 #include "../include/cthread.h"
@@ -43,7 +43,7 @@ int instantiateFinalThread(){
 
 	getcontext(&finalThreadAddress);
 
-	finalThreadAddress.uc_link = 0;
+	finalThreadAddress.uc_link = mainContext;
 	finalThreadAddress.uc_stack.ss_sp = stackMem;
 	finalThreadAddress.uc_stack.ss_size = sizeof stackMem;
 
@@ -97,7 +97,7 @@ int ccreate (void *(*start)(void *), void *arg, int prio){
 	newThread->context.uc_stack.ss_size = sizeof stackMem;
 
 
-	printf("LINK DA NOVA FUNCAO CRIADA=%d\n",(int)newThread->context.uc_link);
+	//printf("LINK DA NOVA FUNCAO CRIADA=%d\n",(int)newThread->context.uc_link);
 
 	//Referencia para as atribuições acima se alguém quiser ver.
   //http://nitish712.blogspot.com.br/2012/10/thread-library-using-context-switching.html
@@ -115,9 +115,9 @@ int ccreate (void *(*start)(void *), void *arg, int prio){
 
 	//InsertInFIla r'etorna 0 caso for inicializado com sucesso.
 	if(!insertInFila(&aptos,newThread)){
-		printf("Thread inserida na fila!\n");
+		//printf("Thread inserida na fila!\n");
 	} else{
-		printf("Erro na inserção da thread na fila\n");
+		//printf("Erro na inserção da thread na fila\n");
 		return -2;
 	}
 
@@ -128,32 +128,22 @@ int ccreate (void *(*start)(void *), void *arg, int prio){
 	}
 
 	//Retorno do tId da thread criada.
-	printf("Nova thread criada com sucesso. tid=%d\n", newThread->tid);
+	//printf("Nova thread criada com sucesso. tid=%d\n", newThread->tid);
 	return (newThread->tid);
 
 }
 
 
 void dispatch(TCB_t * oldDispatch){
-	printf("\n dispatcher entrou\n");
+	//printf("\n dispatcher entrou\n");
 
-	if (FirstFila2(&aptos) == 0) {
-		TCB_t* novaThreadExecutar = NULL;
-		if(GetAtIteratorFila2(&aptos) != NULL){
-			printf("atribuindo nova thread com o que tem em apto\n");
-			novaThreadExecutar = (TCB_t*) GetAtIteratorFila2(&aptos);//pedaco do escalonador na dispactch
-			if(execute == NULL){
-				execute = novaThreadExecutar;
-				DeleteAtIteratorFila2(&aptos);
-			}
-		}
+	//printFila(&aptos);
+	//printf("<-fila \n  thread a ser escalonada=%d\n",execute->tid);
+		
+	if(FirstFila2(&aptos) == 0){
+		//printf("Old nao 'e null");
+		swapcontext(&(oldDispatch->context),&(execute->context));
 	}
-	printFila(&aptos);
-	printf("<-fila \n  thread a ser escalonada=%d\n",execute->tid);
-		printf("1");
-	if(oldDispatch != NULL)
-		swapcontext(&(execute->context),&(oldDispatch->context));
-	else
-		setcontext(&(execute->context));
+
 
 }

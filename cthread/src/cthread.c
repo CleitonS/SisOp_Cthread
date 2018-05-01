@@ -38,11 +38,11 @@ int checkMainThread(){
 		return 0;
 	}else{
 		if(!initLib()){
-			printf("Thread Main nao estava iniciada e foi criada junto com as filas.\n");
+			//printf("Thread Main nao estava iniciada e foi criada junto com as filas.\n");
 			init = 1;
 			return 0;
 		}else{
-			printf("Erro na execucao de initLib.\n");
+			//printf("Erro na execucao de initLib.\n");
 			return -1;
 		}
 	}
