@@ -19,6 +19,7 @@ void* func0(void *arg) {
 
 void* func1(void *arg) {
 	printf("Eu sou a thread ID1 imprimindo %d\n", *((int *)arg));
+	printf("leiteeee");
 }
 
 
@@ -39,7 +40,7 @@ int main(int argc, char *argv[]) {
 	printf("Eu sou a main ap�s a cria��o de ID0 e ID1\n");
 
 	cjoin(id0);
- 	//cjoin(id1);
+ 	cjoin(id1);
   //cjoin(id3);
 
 	printf("Eu sou a main voltando para terminar o programa\n");

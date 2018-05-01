@@ -147,9 +147,7 @@ int nextApto(){
 				return -3;
 			}
 			else{
-        printf("\nca estou eu antes de swapcontext\n");
-       swapcontext(&OldNode->context,&dispatchAddress);
-        printf("\nca estou eu depois de swapcontext\n");
+        printf("cjoin retornando zero\n");
 				return 0;
       }
 		}

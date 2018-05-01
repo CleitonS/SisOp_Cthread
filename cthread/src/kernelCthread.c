@@ -47,6 +47,9 @@ int shiftNextApto(FILA2 *fila){
     if (insertInFila(fila, execute) != 0 )
       return -1;
     else {
+      printf("\nca estou eu antes de swapcontext\n");
+     swapcontext(&execute->context,&dispatchAddress);
+      printf("\nca estou eu depois de swapcontext\n");
       if(!nextApto()){
         return 0;
       }
@@ -103,6 +106,8 @@ Retorno:
 
 ******************************************************************************/
 int cjoin(int tid){
+
+    printf("inicio cjoin\n");
 
     TCB_t * atualcontext = NULL;
 
